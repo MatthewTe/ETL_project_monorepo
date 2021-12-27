@@ -1,0 +1,154 @@
+##############################################################
+# The main docker-compose file for standing up the mono-repo 
+# of the data ingestion project.
+##############################################################
+---
+version: '3.9'
+
+x-airflow-common:
+  &airflow-common
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.1.2}
+  networks:
+    - ETL-REST-Project
+  env_file: 
+    - .env
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:${REDIS_PORT}/0
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
+    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+  volumes:
+    - ./airflow_pipelines/dags:/opt/airflow/dags
+    - ./airflow_pipelines/logs:/opt/airflow/logs
+    - ./airflow_pipelines/plugins:/opt/airflow/plugins
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    redis:
+      condition: service_healthy
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:13
+    networks:
+      - ETL-REST-Project
+    env_file:
+      - .env
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  redis:
+    image: redis:latest
+    env_file: 
+      - .env
+    networks:
+      - ETL-REST-Project
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    env_file: 
+      - .env
+    networks:
+      - ETL-REST-Project
+    ports:
+      - ${AIRFLOW_WEBSERVER_PORT}:${AIRFLOW_WEBSERVER_PORT}
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:${AIRFLOW_WEBSERVER_PORT}/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    env_file: 
+      - .env
+    networks:
+      - ETL-REST-Project
+    healthcheck:
+      test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-worker:
+    <<: *airflow-common
+    command: celery worker
+    env_file: 
+      - .env
+    networks:
+      - ETL-REST-Project
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    command: version
+    env_file: 
+      - .env
+    networks:
+      - ETL-REST-Project
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+
+  flower:
+    <<: *airflow-common
+    command: celery flower
+    env_file: 
+      - .env
+    networks:
+      - ETL-REST-Project
+    ports:
+      - ${FLOWER_PORT}:${FLOWER_PORT}
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:${FLOWER_PORT}/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+  
+  #private-rest-api:
+  
+  #public-rest-api:
+  
+  #rest_api_psql:
+
+volumes:
+  postgres-db-volume:
+
+networks:
+  ETL-REST-Project:
+    
