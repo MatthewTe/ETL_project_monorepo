@@ -1,5 +1,21 @@
 from django.db import models
 
+class Subreddit(models.Model):
+    """The database model for a subreddit. It is used mainly as a relational field connected to
+    the RedditPost database model.
+    
+    Attributes:
+        name (models.CharField): The name of the subreddit. This needs to be the url reference for 
+            the subreddit as it will be used by the data ingestion function to extract data.
+
+        description (models.CharField): The subreddits own description.
+    """
+    name = models.CharField(max_length=250)
+    description = models.CharField(max_length=350, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
 # Reddit Data Pipeline Model:
 class RedditPosts(models.Model):
     """A django model object that represents the data table
@@ -14,11 +30,13 @@ class RedditPosts(models.Model):
     +----------+---------+-------+-------+------------+-----+------------+----------+--------+-------+-------+---------+------+--------------+----------+-------------------------+--------------+-------------+
     |id (index)|subreddit| title |content|upvote_ratio|score|num_comments|created_on|stickied|over_18|spoiler|permalink|author|author_is_gold|author_mod|author_has_verified_email|author_created|comment_karma|
     +----------+---------+-------+-------+------------+-----+------------+----------+--------+-------+-------+---------+------+--------------+----------+-------------------------+--------------+-------------+
-    | string   | string  |string | string|   float    | int |     int    | datetime |  Bool  | Bool  |  Bool |   str   |  str |      Bool    |  Bool    |           Bool          |      str     |     int     |
+    | string   |   FK    |string | string|   float    | int |     int    | datetime |  Bool  | Bool  |  Bool |   str   |  str |      Bool    |  Bool    |           Bool          |      str     |     int     |
     +----------+---------+-------+-------+------------+-----+------------+----------+--------+-------+-------+---------+------+--------------+----------+-------------------------+--------------+-------------+
     Attributes:
         id (models.CharField): The unique reddit id for the post.
-        subreddit (models.CharField): The name of the subreddit of the post.
+        
+        subreddit (models.ForeginKey): A foregin key connection to the Subreddit data model.
+
         title (models.CharField): The title of the reddit post.
         
         content (models.TextField): The full text content of the reddit post in markdown format.
@@ -33,16 +51,25 @@ class RedditPosts(models.Model):
         
         stickied (models.BooleanField): A Boolean indicating if the post was "stuck" or 
             "pinned" to the top of the subreddit.
+
         over_18 (models.BooleanField): A Boolean indicating if the post is marked Not Safe For Work.
+        
         spoiler (models.Boolean): A Boolean indicating if the post is marked as a spoiler.
+        
         permalink (models.CharField): The permanent url path to the post.
+        
         author (models.CharField): The name of the author of the post.
+        
         author_is_gold: (models.IntegerField): A Boolean indicating if the author of the post has been given gold. 
+        
         author_mod: (models.BooleanField): A Boolean, indicating if the author
             of the post is a moderator of the subreddit. 
+        
         author_has_verified_email: (models.BooleanField): A Boolean Field indicating if the author
             of the post has a verified email. 
+        
         author_created (models.DateTimeField): The UTC date and time that the author's account was created.
+        
         comment_karma (models.IntegerField): The amount of karma that a post has.
     """
     id = models.CharField(
@@ -51,7 +78,9 @@ class RedditPosts(models.Model):
         primary_key=True) 
     
     title = models.CharField(max_length= 300, null=True)
-    subreddit = models.CharField(max_length=200, null=True)
+
+    subreddit = models.ForeignKey(Subreddit, on_delete=models.SET_NULL, null=True)
+
     content = models.TextField(null=True)
     upvote_ratio = models.FloatField(null=True)
     score = models.IntegerField(null=True)
@@ -82,6 +111,26 @@ class RedditPosts(models.Model):
         abstract = False
         ordering = ['-created_on']
         
-
     def __str__(self):
         return f"{self.title}-{self.subreddit}"
+
+class RedditDeveloperAccount(models.Model):
+    """ The model containing the information about the Reddit Developer Account that is
+    used to initalize the praw api for extracting reddit posts.
+
+    https://www.reddit.com/prefs/apps
+
+    Attribute:
+        dev_client_id (str): The reddit developer account id.
+        
+        dev_secret (str): The secret key for the reddit developer account.
+
+        dev_user_agent (str): The user agent (application description string) of the reddit developer account.
+    
+    """
+    dev_client_id = models.CharField(max_length=50)
+    dev_secret = models.CharField(max_length=50)
+    dev_user_agent = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.dev_user_agent

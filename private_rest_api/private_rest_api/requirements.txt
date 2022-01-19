@@ -1,3 +1,16 @@
+# Django packages:
+django
 djangorestframework
-markdown
 django-filter
+django-celery-beat
+
+# Process Scheudler packages:
+Redis
+celery
+
+# Database packages:
+psycopg2
+
+# Additional packages:
+markdown
+praw
