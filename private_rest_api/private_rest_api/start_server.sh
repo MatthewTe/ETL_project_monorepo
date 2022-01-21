@@ -11,7 +11,9 @@ python manage.py migrate
 
 # Starting the celery schedueler processes:
 echo "Starting the celery worker and the celery-beat scheduler then running the server"
-celery -A private_rest_api worker -l INFO & celery -A private_rest_api beat -l INFO & python manage.py runserver 0.0.0.0:80
+celery -A private_rest_api worker -l INFO &\\
+celery -A private_rest_api beat -l INFO & \\
+python manage.py runserver 0.0.0.0:80
 
 # Starting Server:
 #echo "Running Server"

@@ -3,14 +3,16 @@ from django.contrib import admin
 from rest_framework import routers
 from django.urls import path, include
 
-router = routers.DefaultRouter()
+#router = routers.DefaultRouter()
 
 # Importing Reddit API Viewsets:
-from .views import RedditPostViewSet
+from .views import reddit_posts
 
 # Adding reddit REST API routes to the router:
-router.register(r"posts", RedditPostViewSet)
+#router.register(r"posts", RedditPostsAPI, basename="RedditPosts")
 
 # Creating Automatic URL Routing:
-urlpatterns = router.urls
+urlpatterns = [
+    path(r"posts", reddit_posts, name="Reddit Posts")
+]
     

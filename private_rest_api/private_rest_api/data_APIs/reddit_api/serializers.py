@@ -5,15 +5,12 @@ from rest_framework import serializers
 from .models import RedditPosts
 
 # Abstract Serializer Objects:
-class RedditPostsSerializer(serializers.HyperlinkedModelSerializer):
+class RedditPostsSerializer(serializers.ModelSerializer):
     
-    # Explicitly Adding Primary Key to Reddit Serializer:
-    id = serializers.CharField()
-
-    def __init__(self, *args, **kwargs):
-        many = kwargs.pop('many', True)
-        super(RedditPostsSerializer, self).__init__(many=many, *args, **kwargs)
+    # Specifying the ForeginKey field on display:
+    subreddit = serializers.CharField(source="subreddit.name")
 
     class Meta:
         model = RedditPosts
         fields = "__all__"
+        depth = 1

@@ -11,6 +11,11 @@ celery
 # Database packages:
 psycopg2
 
-# Additional packages:
+# Frontend related packages:
 markdown
+pyyaml 
+uritemplate
+coreapi
+
+# Packages for data ingestion:
 praw
