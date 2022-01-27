@@ -2,21 +2,23 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+#DEBUG = os.environ.get("DEBUG", True)
+DEBUG=False
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+if DEBUG:
+    SECRET_KEY = '=ku2)(%oeuqzgy=pc3jw8gj+))0t_cpu-9pmjy2hl+$6^jq5t_'
+else:
+    SECRET_KEY = os.environ['SECRET_KEY']
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=ku2)(%oeuqzgy=pc3jw8gj+))0t_cpu-9pmjy2hl+$6^jq5t_'
+# Configuring the Settings Params based on the Debug status to seperate between production and development:
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = ["rest-api"]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_celery_beat",
+    "djoser",
 
     # Core API Logic:
     "api_core",
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -68,46 +72,64 @@ TEMPLATES = [
 WSGI_APPLICATION = 'private_rest_api.wsgi.application'
 
 # REST FRAMEWORK Configuration:
-REST_FRAMEWORK = {
-    
-    # Authentication/Permission:
-    #'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-    #'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication']
+if DEBUG:
+    REST_FRAMEWORK = {
+        # Authentication/Permission:
+        'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
+        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
 
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+        "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE": 10
+    }
+else:
+    REST_FRAMEWORK = {        
+        "DEFAULT_AUTHENTICATION_CLASSES": [
+            "rest_framework.authentication.BasicAuthentication"
+            "rest_framework.authentication.SessionAuthentication",
+            "rest_framework.authentication.TokenAuthentication"],
 
-}
+        "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+
+        "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE": 10
+    }
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ["POSTGRES_DB"],
-        'USER': os.environ["POSTGRES_USER"],
-        'PASSWORD': os.environ["POSTGRES_PASSWORD"],
-        'HOST': "rest-api-psql",
-        'PORT': os.environ["POSTGRES_PORT"]
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ["POSTGRES_DB"],
+            'USER': os.environ["POSTGRES_USER"],
+            'PASSWORD': os.environ["POSTGRES_PASSWORD"],
+            'HOST': "rest-api-psql",
+            'PORT': os.environ["POSTGRES_PORT"]
+        }
     }
-}
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-"""
+
+if DEBUG:
+    pass
+else:
+    # Configuring the Celery Broker:
+    CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+# Celery Settings:
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -123,27 +145,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = "/staticroot/"
 STATIC_URL = '/static/'
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "api_core.CustomUser"
-
-# Celery Settings:
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

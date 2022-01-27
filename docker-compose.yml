@@ -12,11 +12,10 @@ services:
     networks: 
       - rest_api_network
     ports: 
-      - "80:80" 
+      - "81:81" 
 
   # Django REST API:
   private-rest-api:
-    tty: true
     build: private_rest_api/.
     depends_on: 
       - redis

@@ -20,6 +20,9 @@ urlpatterns = [
         version="0.0.1"), 
         name="openapi-schema"),
 
+    # Core Functionality for API Routes:
+    path("api_core/", include("api_core.urls")),
+
     # Reddit REST API Urls:
     path('reddit/', include("data_APIs.reddit_api.urls"))
 

@@ -3,6 +3,7 @@ django
 djangorestframework
 django-filter
 django-celery-beat
+gunicorn
 
 # Process Scheudler packages:
 Redis
@@ -12,6 +13,8 @@ celery
 psycopg2
 
 # Frontend related packages:
+whitenoise
+djoser
 markdown
 pyyaml 
 uritemplate
