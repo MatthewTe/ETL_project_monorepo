@@ -3,7 +3,10 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #DEBUG = os.environ.get("DEBUG", True)
-DEBUG=False
+
+#DEBUG=False
+DEBUG=True
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 if DEBUG:
@@ -32,8 +35,9 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_celery_beat",
     "djoser",
+    "drf_yasg",
 
-    # Core API Logic:
+    # Core API Logic:   
     "api_core",
 
     # Reddit API:
@@ -76,11 +80,11 @@ if DEBUG:
     REST_FRAMEWORK = {
         # Authentication/Permission:
         'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+        #'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
 
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
-        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
         "PAGE_SIZE": 10
     }
 else:
@@ -92,8 +96,8 @@ else:
 
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
-        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-        "PAGE_SIZE": 10
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+        "PAGE_SIZE": 30
     }
 
 # Database
@@ -154,6 +158,7 @@ USE_TZ = True
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = "/staticroot/"
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "api_core.CustomUser"

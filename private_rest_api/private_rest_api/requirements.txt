@@ -18,7 +18,7 @@ djoser
 markdown
 pyyaml 
 uritemplate
-coreapi
+drf-yasg
 
 # Packages for data ingestion:
 praw
