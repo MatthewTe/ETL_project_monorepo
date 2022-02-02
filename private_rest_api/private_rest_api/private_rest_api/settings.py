@@ -4,8 +4,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #DEBUG = os.environ.get("DEBUG", True)
 
-DEBUG=False
-#DEBUG=True
+#DEBUG=False
+DEBUG=True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +19,7 @@ else:
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ["rest-api"]
+    ALLOWED_HOSTS = ["rest-api", "localhost"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -80,7 +80,7 @@ if DEBUG:
     REST_FRAMEWORK = {
         # Authentication/Permission:
         'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-        #'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
 
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
@@ -88,12 +88,11 @@ if DEBUG:
         "PAGE_SIZE": 10
     }
 else:
-    REST_FRAMEWORK = {        
-        "DEFAULT_AUTHENTICATION_CLASSES": [
-            "rest_framework.authentication.BasicAuthentication",
-            "rest_framework.authentication.SessionAuthentication",
-            "rest_framework.authentication.TokenAuthentication"],
-
+    REST_FRAMEWORK = {     
+        
+        'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
+        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+   
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
         "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
