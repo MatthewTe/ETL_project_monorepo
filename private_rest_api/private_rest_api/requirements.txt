@@ -2,7 +2,7 @@
 django
 djangorestframework
 django-filter
-django-celery-beat
+django-celery-beat==2.2.1
 gunicorn
 
 # Process Scheudler packages:
