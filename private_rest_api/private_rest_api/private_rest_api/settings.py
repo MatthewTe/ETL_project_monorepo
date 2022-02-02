@@ -4,8 +4,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #DEBUG = os.environ.get("DEBUG", True)
 
-#DEBUG=False
-DEBUG=True
+DEBUG=False
+#DEBUG=True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
