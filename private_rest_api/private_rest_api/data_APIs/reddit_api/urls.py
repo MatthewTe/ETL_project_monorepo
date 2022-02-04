@@ -6,13 +6,14 @@ from django.urls import path, include
 #router = routers.DefaultRouter()
 
 # Importing Reddit API Viewsets:
-from .views import reddit_posts
+from .views import reddit_posts, subreddits
 
 # Adding reddit REST API routes to the router:
 #router.register(r"posts", RedditPostsAPI, basename="RedditPosts")
 
 # Creating Automatic URL Routing:
 urlpatterns = [
-    path(r"posts", reddit_posts, name="Reddit Posts")
+    path(r"subreddits/", subreddits, name="Subreddits"),
+    path(r"posts/", reddit_posts, name="Reddit Posts")
 ]
     

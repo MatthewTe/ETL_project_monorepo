@@ -11,7 +11,11 @@ from rest_framework.renderers import JSONRenderer
 
 # Importing Reddit Models and Serializers:
 from .models import RedditPosts, RedditDeveloperAccount, Subreddit
-from .serializers import RedditPostsSerializer
+from .serializers import RedditPostsSerializer, SubredditSerializer
+
+# Importing schema documentation methods:
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 # Convience Methods:
 def queryset_datetime_filter(queryset, start_date, end_date):
@@ -52,7 +56,50 @@ def queryset_datetime_filter(queryset, start_date, end_date):
     
     return queryset
 
+# Describing the Schema parameters for the api view:
+schema_description="The endpoint that provides a list of all supported subreddits for the reddit posts endpoint."
+@swagger_auto_schema(method="get", operation_description=schema_description)
+@api_view(["GET"])
+def subreddits(request):
+    """The basic API endpoint that generates a list of subreddits when queried.
+    """
+    # Querying all subreddits:
+    queryset = Subreddit.objects.all()
 
+    # Seralizing the data into a JSON response and returning the data:
+    seralized_queryset = SubredditSerializer(queryset, many=True, context={'request': request})
+
+    return Response(seralized_queryset.data)
+
+# Describing the Schema parameters for the api view:
+parameter_schema = [
+            openapi.Parameter(
+                "Subreddit",
+                openapi.IN_QUERY,
+                description="Only posts that come from this subreddit will be returned eg: politics",
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+
+            openapi.Parameter(
+                "Start-Date",
+                openapi.IN_QUERY,
+                description="Only posts at or after the specified date will be returned.",
+                type=openapi.TYPE_STRING,
+                pattern="yyyy-mm-dd",
+                required=False
+            ),
+            openapi.Parameter(
+                "End-Date",
+                openapi.IN_QUERY,
+                description="Only posts posted up to (excluding) this date will be returned. Must be in the format yyyy-mm-dd",
+                type=openapi.TYPE_STRING,
+                pattern="yyyy-mm-dd",
+                required=False
+            )
+        ] 
+schema_description = "The endpoint that provides structured reddit post data for all the supported subreddits (which can be determined via the subreddit endpoint). There are various query parameters that can be used to refine the dataset. See our API documentation for more details. "
+@swagger_auto_schema(method="get", manual_parameters=parameter_schema, operation_description=schema_description)
 @api_view(["GET"])
 def reddit_posts(request):
     """The API view that provides reddit posts data by processing incoming GET requests.
@@ -72,18 +119,18 @@ def reddit_posts(request):
     subreddit = request.GET.get("Subreddit", None)
     start_date = request.GET.get("Start-Date", None)
     end_date = request.GET.get("End-Date", None)
-
+        
     # Creating the queryset to be filtered:
     queryset = RedditPosts.objects.all()
 
     # Filtering the QuertSet:
     if subreddit is not None:
-        queryset = queryset.filter(subreddit=subreddit)
-    
+        queryset = queryset.filter(subreddit__name=subreddit)
+
     queryset = queryset_datetime_filter(queryset, start_date, end_date) # by start and end date
 
     # Seralizing the data into a JSON response and returning the data:
     seralized_queryset = RedditPostsSerializer(queryset, many=True, context={'request': request})
     #json = JSONRenderer().render(seralized_queryset.data)
 
-    return Response(seralized_queryset.data)
+    return Response(seralized_queryset.data) 

@@ -16,6 +16,7 @@ schema_view = get_schema_view(
       title="Data APIs",
       default_version='v1',
       terms_of_service="https://www.google.com/policies/terms/",
+      description="See our documentation [here](https://etl-project-monorepo.readthedocs.io/en/latest/)",
       contact=openapi.Contact(email="contact@snippets.local"),
       license=openapi.License(name="MIT License"),
    ),
@@ -37,5 +38,4 @@ urlpatterns = [
 
     # Reddit REST API Urls:
     path('reddit/', include("data_APIs.reddit_api.urls"))
-
 ]

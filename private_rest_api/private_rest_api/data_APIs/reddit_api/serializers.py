@@ -2,15 +2,19 @@
 from rest_framework import serializers
 
 # Importing Reddit Post Models:
-from .models import RedditPosts
+from .models import RedditPosts, Subreddit
 
-# Abstract Serializer Objects:
 class RedditPostsSerializer(serializers.ModelSerializer):
-    
     # Specifying the ForeginKey field on display:
     subreddit = serializers.CharField(source="subreddit.name")
 
     class Meta:
         model = RedditPosts
+        fields = "__all__"
+        depth = 1
+
+class SubredditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subreddit
         fields = "__all__"
         depth = 1

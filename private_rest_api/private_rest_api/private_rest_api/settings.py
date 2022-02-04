@@ -20,7 +20,7 @@ else:
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ["rest-api"]
+    ALLOWED_HOSTS = ["rest-api", "localhost", "159.223.180.214"] # Update on new deploy
 
 # Application definition
 INSTALLED_APPS = [
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "djoser",
     "drf_yasg",
+    "django_filters",
 
     # Core API Logic:   
     "api_core",
@@ -147,6 +148,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Logging Configuration:
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -160,6 +163,18 @@ LOGGING = {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
         },
+    },
+}
+
+# Configuration for Swagger UI:
+SWAGGER_SETTINGS = {
+    # Token Authorization:
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
     },
 }
 
