@@ -43,7 +43,7 @@ services:
       - rest_api_network
     volumes: 
       - rest-api-psql-volume:/var/lib/postgresql/data
-    env_file: 
+#    env_file: 
 #      .env
 
 volumes:
