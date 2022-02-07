@@ -1,8 +1,8 @@
 # Open Data API
-This is the monorepo containing all the applications necessary to stand up the Data Ingestion API project. The project ingests and transforms web data and provides access to the data via a various APIs. The core of the project is a django server and the tech stack is described below.
+This is the monorepo containing all the applications necessary to stand up the Data Ingestion API project. The project ingests and transforms web data and provides access to the data via a various APIs. The core of the project is a django server and the tech stack is described below. The repo also contains the python API for querying data from a hosted version of the project in the `python_api` directory.
 
 ## Use Instructions
-If you are interested in using data from the project you will need to see our API docs here which contain instructions on how to make requests to the API and how to use the python API to programmatically pull data.
+If you are interested in using data from the project you will need to see our API docs [here](https://etl-project-monorepo.readthedocs.io/en/latest/) which contain instructions on how to make requests to the API and how to use the python API to programmatically pull data.
 
 ## Building the Project
 If you want to recreate the project there are specific configurations that will need to be set up before building the project via the docker compose file.
