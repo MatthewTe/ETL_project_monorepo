@@ -3,10 +3,13 @@ import os
 import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-#DEBUG = os.environ.get("DEBUG", True)
+PROD_STATUS = os.environ.get("PRODUCTION", True)
 
-DEBUG=False
-#DEBUG=True
+# Using the production status of the server to set the DEBUG value (doing it this way because of a qwerk of the django-celery module).
+if PROD_STATUS:
+    DEBUG=False
+else:
+    DEBUG=True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +23,7 @@ else:
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ["rest-api", "localhost", "159.223.180.214"] # Update on new deploy
+    ALLOWED_HOSTS = ["rest-api", "localhost", os.environ.get("ALLOWED_HOST", "")] # Update on new deploy
 
 # Application definition
 INSTALLED_APPS = [

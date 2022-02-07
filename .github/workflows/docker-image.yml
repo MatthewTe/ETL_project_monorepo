@@ -6,20 +6,16 @@ on:
 
 env:
   # PostgreSQL Configuration:
-  POSTGRES_USER: django_rest_api
-  POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-  POSTGRES_DB: rest_api
   POSTGRES_PORT: 5432 
   # Django Server Configuration: 
   PRODUCTION: True
-  SECRET_KEY: ${{secrets.SECRET_KEY}}
-  ALLOWED_HOST: ${{env.ALLOWED_HOST}}
 
 jobs:
 
   build:
 
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest  
+    environment: main_deployment  
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker Compose stack
