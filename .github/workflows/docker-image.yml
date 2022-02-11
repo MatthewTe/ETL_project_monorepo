@@ -18,12 +18,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker Compose stack
-      run: touch .env
-      run: echo "POSTGRES_USER=$POSTGRES_USER" >> .env
-      run: echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> .env
-      run: echo "POSTGRES_DB=$POSTGRES_DB" >> .env
-      run: echo "POSTGRES_PORT=$POSTGRES_PORT" >> .env
-      run: echo "PRODUCTION=$PRODUCTION" >> .env
-      run: echo "SECRET_KEY=$SECRET_KEY" >> .env
-      run: echo "ALLOWED_HOST=$ALLOWED_HOST" >> .env
+      run: | 
+        touch .env
+        run: echo "POSTGRES_USER=$POSTGRES_USER" >> .env
+        run: echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> .env
+        run: echo "POSTGRES_DB=$POSTGRES_DB" >> .env
+        run: echo "POSTGRES_PORT=$POSTGRES_PORT" >> .env
+        run: echo "PRODUCTION=$PRODUCTION" >> .env
+        run: echo "SECRET_KEY=$SECRET_KEY" >> .env
+        run: echo "ALLOWED_HOST=$ALLOWED_HOST" >> .env
       run: docker-compose up --build -d 
