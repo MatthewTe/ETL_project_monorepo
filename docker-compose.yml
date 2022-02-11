@@ -24,8 +24,8 @@ services:
     container_name: ETL-rest-api
     networks: 
       - rest_api_network
-#    env_file:
-#      .env
+    env_file:
+     .env
 
   # Reddis Database for Celery:
   redis:
@@ -43,8 +43,8 @@ services:
       - rest_api_network
     volumes: 
       - rest-api-psql-volume:/var/lib/postgresql/data
-#    env_file: 
-#      .env
+    env_file: 
+      .env
 
 volumes:
   rest-api-psql-volume:
