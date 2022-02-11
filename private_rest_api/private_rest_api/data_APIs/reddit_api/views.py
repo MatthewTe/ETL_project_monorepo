@@ -3,15 +3,18 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 # DRF Imports:
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
+from rest_framework.pagination import PageNumberPagination
 
-# Importing Reddit Models and Serializers:
+# Importing Reddit Models, Serializers, Filters and Paginators:
 from .models import RedditPosts, RedditDeveloperAccount, Subreddit
 from .serializers import RedditPostsSerializer, SubredditSerializer
+from .filters import RedditPostFilter
+from .pagination import RedditEndpointPagination
 
 # Importing schema documentation methods:
 from drf_yasg import openapi
@@ -74,7 +77,23 @@ def subreddits(request):
 # Describing the Schema parameters for the api view:
 parameter_schema = [
             openapi.Parameter(
-                "Subreddit",
+                "title",
+                openapi.IN_QUERY,
+                description="Posts with a title that contains this value will be returned.",
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            
+            openapi.Parameter(
+                "content",
+                openapi.IN_QUERY,
+                description="Posts that have content that contains this value will be returned.",
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+
+            openapi.Parameter(
+                "subreddit",
                 openapi.IN_QUERY,
                 description="Only posts that come from this subreddit will be returned eg: politics",
                 type=openapi.TYPE_STRING,
@@ -82,7 +101,7 @@ parameter_schema = [
             ),
 
             openapi.Parameter(
-                "Start-Date",
+                "start_date",
                 openapi.IN_QUERY,
                 description="Only posts at or after the specified date will be returned.",
                 type=openapi.TYPE_STRING,
@@ -90,13 +109,23 @@ parameter_schema = [
                 required=False
             ),
             openapi.Parameter(
-                "End-Date",
+                "end_date",
                 openapi.IN_QUERY,
                 description="Only posts posted up to (excluding) this date will be returned. Must be in the format yyyy-mm-dd",
                 type=openapi.TYPE_STRING,
                 pattern="yyyy-mm-dd",
                 required=False
+            ),
+
+            openapi.Parameter(
+                "per_page",
+                openapi.IN_QUERY,
+                description="This specifies the number of items that will be returned per query. This is set by default to 200 due to performance limitations of the Swagger UI. For use this can be set as large as you require.",
+                type=openapi.TYPE_INTEGER,
+                required=False,
+                default=200
             )
+
         ] 
 schema_description = "The endpoint that provides structured reddit post data for all the supported subreddits (which can be determined via the subreddit endpoint). There are various query parameters that can be used to refine the dataset. See our API documentation for more details. "
 @swagger_auto_schema(method="get", manual_parameters=parameter_schema, operation_description=schema_description)
@@ -108,29 +137,33 @@ def reddit_posts(request):
 
     Arguments:
         
-        Subreddit (str): The dataset can be filtered based on the subreddit of the post. Eg: "politics"
+        title (str): The title of the reddit post can be filtered based on if it contains the string.
 
-        Start-Date (yyyy-mm-dd): Reddits Posts only on or after this date will be returned.
+        content (str): The main body of the reddit post can be filtered based on if it contains the string. 
+
+        subreddit (str): The dataset can be filtered based on the subreddit of the post. Eg: "politics"
+
+        start-date (yyyy-mm-dd): Reddits Posts only on or after this date will be returned.
         
-        End-Date (yyyy-mm-dd): Reddits Posts up to (including) this date will be returned.
+        end-date (yyyy-mm-dd): Reddits Posts up to (including) this date will be returned.
         
-    """
-    # Extracting query params from url:
-    subreddit = request.GET.get("Subreddit", None)
-    start_date = request.GET.get("Start-Date", None)
-    end_date = request.GET.get("End-Date", None)
-        
+    """        
     # Creating the queryset to be filtered:
     queryset = RedditPosts.objects.all()
 
-    # Filtering the QuertSet:
-    if subreddit is not None:
-        queryset = queryset.filter(subreddit__name=subreddit)
+    # Creating and configuring pagination:
+    paginator = RedditEndpointPagination()
 
-    queryset = queryset_datetime_filter(queryset, start_date, end_date) # by start and end date
+    # Applying filters based on query parameters in GET request:
+    filterset = RedditPostFilter(request.GET, queryset=queryset) 
+    if filterset.is_valid():
+        queryset = filterset.qs
+    
+    # Paginating the queryset:
+    queryset = paginator.paginate_queryset(queryset, request)
 
     # Seralizing the data into a JSON response and returning the data:
     seralized_queryset = RedditPostsSerializer(queryset, many=True, context={'request': request})
     #json = JSONRenderer().render(seralized_queryset.data)
 
-    return Response(seralized_queryset.data) 
+    return Response(seralized_queryset.data, status=status.HTTP_200_OK) 

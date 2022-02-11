@@ -3,7 +3,7 @@ import os
 import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-PROD_STATUS = os.environ.get("PRODUCTION", True)
+PROD_STATUS = os.environ.get("PRODUCTION", False)
 
 # Using the production status of the server to set the DEBUG value (doing it this way because of a qwerk of the django-celery module).
 if PROD_STATUS:
@@ -90,7 +90,7 @@ if DEBUG:
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
         "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-        "PAGE_SIZE": 10
+        "PAGE_SIZE": 100,
     }
 else:
     REST_FRAMEWORK = {     
@@ -101,7 +101,7 @@ else:
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
         "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-        "PAGE_SIZE": 30
+        "PAGE_SIZE": 100,
     }
 
 # Database
@@ -152,22 +152,24 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Logging Configuration:
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+if DEBUG:
+    pass
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            },
         },
-    },
-}
+    }
 
 # Configuration for Swagger UI:
 SWAGGER_SETTINGS = {
