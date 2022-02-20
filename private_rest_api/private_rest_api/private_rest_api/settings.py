@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     # Core API Logic:   
     "api_core",
 
-    # Reddit API:
-    "data_APIs.reddit_api"
+    # Project specific API urls:
+    "data_APIs.reddit_api",
+    "data_APIs.twitter_api"
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,7 @@ if DEBUG:
     REST_FRAMEWORK = {
         # Authentication/Permission:
         'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+        #'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
 
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
