@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 # Importing views:
-from .views import test
+from .views import trending_twitter_topics
 
 urlpatterns = [
-    path(r"trending/", test, name="Trending Topics") 
+    path(r"trending/", trending_twitter_topics, name="Trending Topics") 
 ]

@@ -110,3 +110,6 @@ class TrendingTwitterTopic(models.Model):
 
     def __str__(self):
         return f"{self.name}-{self.created_at}-{self.location}"
+
+    class Meta:
+        ordering = ['-created_at']
