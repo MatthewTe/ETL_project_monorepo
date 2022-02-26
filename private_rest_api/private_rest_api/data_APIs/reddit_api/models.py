@@ -120,7 +120,7 @@ class RedditDeveloperAccount(models.Model):
 
     https://www.reddit.com/prefs/apps
 
-    Attribute:
+    Attributes:
         dev_client_id (str): The reddit developer account id.
         
         dev_secret (str): The secret key for the reddit developer account.

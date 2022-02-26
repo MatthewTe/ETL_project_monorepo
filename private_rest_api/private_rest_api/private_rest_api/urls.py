@@ -36,6 +36,9 @@ urlpatterns = [
     # Core Functionality for API Routes:
     path("api_core/", include("api_core.urls")),
 
-    # Reddit REST API Urls:
-    path('reddit/', include("data_APIs.reddit_api.urls"))
+    # Reddit REST API urls:
+    path('reddit/', include("data_APIs.reddit_api.urls")),
+
+    # Twitter REST API urls:
+    path('twitter/', include('data_APIs.twitter_api.urls'))
 ]

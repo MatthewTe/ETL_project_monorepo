@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     # Core API Logic:   
     "api_core",
 
-    # Reddit API:
-    "data_APIs.reddit_api"
+    # Project specific API urls:
+    "data_APIs.reddit_api",
+    "data_APIs.twitter_api"
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,7 @@ if DEBUG:
     REST_FRAMEWORK = {
         # Authentication/Permission:
         'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+        #'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
 
         "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 
@@ -151,7 +152,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Logging Configuration:
+# Logging & Error Catching Configuration:
+# Console Logging:
 if DEBUG:
     pass
 else:
@@ -170,6 +172,20 @@ else:
             },
         },
     }
+
+# Sentry Error Catching Configuration:
+if DEBUG==False:
+    # Importing SDK:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn="https://fe8a2428b4984abd83604d5c26a9c051@o1148429.ingest.sentry.io/6219915",
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        send_default_pii=True
+    )
+
 
 # Configuration for Swagger UI:
 SWAGGER_SETTINGS = {

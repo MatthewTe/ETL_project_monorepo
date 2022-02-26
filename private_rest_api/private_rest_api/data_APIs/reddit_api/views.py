@@ -103,9 +103,8 @@ parameter_schema = [
             openapi.Parameter(
                 "start_date",
                 openapi.IN_QUERY,
-                description="Only posts at or after the specified date will be returned.",
+                description="Only posts at or after the specified date will be returned. Must be in the format yyyy-mm-dd",
                 type=openapi.TYPE_STRING,
-                pattern="yyyy-mm-dd",
                 required=False
             ),
             openapi.Parameter(
@@ -113,7 +112,6 @@ parameter_schema = [
                 openapi.IN_QUERY,
                 description="Only posts posted up to (excluding) this date will be returned. Must be in the format yyyy-mm-dd",
                 type=openapi.TYPE_STRING,
-                pattern="yyyy-mm-dd",
                 required=False
             ),
 
