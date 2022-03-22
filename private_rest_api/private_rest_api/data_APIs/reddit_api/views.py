@@ -156,12 +156,11 @@ def reddit_posts(request):
     filterset = RedditPostFilter(request.GET, queryset=queryset) 
     if filterset.is_valid():
         queryset = filterset.qs
-    
+
     # Paginating the queryset:
-    queryset = paginator.paginate_queryset(queryset, request)
-
+    paginated_queryset = paginator.paginate_queryset(queryset, request)
+    
     # Seralizing the data into a JSON response and returning the data:
-    seralized_queryset = RedditPostsSerializer(queryset, many=True, context={'request': request})
-    #json = JSONRenderer().render(seralized_queryset.data)
-
-    return Response(seralized_queryset.data, status=status.HTTP_200_OK) 
+    seralized_queryset = RedditPostsSerializer(paginated_queryset, many=True, context={'request': request})
+    
+    return paginator.get_paginated_response(seralized_queryset.data)
