@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '../views/core/HomeView.vue'
 import ArticleView from '../views/articles/ArticlesView.vue'
+import FullArticle from '../views/articles/FullArticle.vue'
 import DataDashboardView from '../views/data_dashboards/DataDashboardsView.vue'
 import NorthKoreaView from '../views/north_korea/NorthKoreaIndexView.vue'
 import DeveloperDocumentationView from '../views/documentation/DeveloperDocumentationView.vue'
@@ -17,6 +18,11 @@ const routes = [
     path: '/articles',
     name: 'articles',
     component: ArticleView
+  },
+  {
+    path: '/articles/:slug',
+    name: 'FullArticle',
+    component: FullArticle
   },
   {
     path: '/dashboards',
