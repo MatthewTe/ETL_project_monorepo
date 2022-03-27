@@ -14,8 +14,13 @@ from api_core.models import CustomUser
 from .models import Article, ArticleCategory
 from .serializers import ArticleSerializer, ArticleSummarySerializer
 
-# TODO: Add documentation for the CRUD functions for Articles.
+# Importing schema documentation methods:
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 # TODO: Add openapi documentation for ArticleViewSet
+# TODO: Add pagination and filtering to the ArticleViewSet list() function.
+# TODO: Decide if HTML needs to be escaped in the POST request or in the retrieve function.
 
 # TODO: Populate a ArticleCategoryViewSet with only list, create, destroy. 
 # TODO: Add documentation for ArticleCategoryViewSet.
@@ -24,15 +29,30 @@ from .serializers import ArticleSerializer, ArticleSummarySerializer
 class ArticleViewSet(viewsets.ViewSet):
     """The main viewset for performing CRUD functions on the Article model.
     
-    The object deals with the full CRUD operations for the Article model and appropriate Article authentication/permissions.
+    The object deals with the full CRUD operations for the Article model and appropriate Article 
+    authentication/permissions.
 
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     lookup_field = "slug"
 
+    @swagger_auto_schema(operation_description="Placeholder for list() GET endpoint schema.")
     def list(self, request):
-        """
+        """The method that recives a GET request and returns multiple article summary objects.
+
+        The GET requests results in a paginated and filtered JSON response of summary article data. This
+        summary data is created by passing the main Article queryset through the ArticleSummarySerializer 
+        instead of the ArticleSerializer. This ommits the main body content from each Article object.
+
+        The purpose of this endpoint is to provide a way for front-end services to query 'thumbnails' of
+        articles.
+
+        Args:
+            request (request): The HTTP request object recieved from the query.
+
+        Returns:
+            rest_framework.response.Response: The HTTP response containing the Article Sumamry data as JSON.
         """
         # Creating the main queryset:
         queryset = Article.objects.all()
@@ -41,9 +61,38 @@ class ArticleViewSet(viewsets.ViewSet):
         seralized_queryset = ArticleSummarySerializer(queryset, many=True, context={'request':request})
         
         return Response(seralized_queryset.data, status=status.HTTP_202_ACCEPTED)
-
+    
+    @swagger_auto_schema(operation_description="Placeholder for POST request endpoint schema.")
     def create(self, request):
-        """
+        """The method that proceses the POST request used to create Article objects and store them in the 
+        database.
+
+        The method requires the content of the Article to be passed as a dictionary in the request body. It
+        extracts this body content and uses it to create an Article database object. For foreign key fields
+        the method queries the respective objects based on the query param provided in the request. 
+
+        For the ArticleCategory foreign key, if a corresponding category is not found, a new ArticleCategory 
+        object is created using the query param and said new Cateogry object is then used as the Article's 
+        foreign key.
+
+        The fields required to create an Article object are:
+            
+            title (str): The article title
+            
+            body (str): The HTML body content that is escaped in order to prevent malicious injection.
+
+            author (str): The author of the post, which must correspond to a CustomUser instance via its
+                username field.
+            
+            category (str): The main category the article falls under. This value corresponds with the 'name'
+                field of an ArticleCategory object. If it does not, a new ArticleCategory object is created.
+
+        Args:
+            request (request): The HTTP POST request object recieved from the query.
+
+        Returns:
+            rest_framework.response.Response: The HTTP response containing the newly created article object.
+
         """
         # Extracting params from request body to create Article object:
         body_unicode = request.body.decode('utf-8')
@@ -86,9 +135,19 @@ class ArticleViewSet(viewsets.ViewSet):
         except Exception as error:
             print(error)
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+    
+    @swagger_auto_schema(operation_description="Placeholder for the single Artilce GET request endpoint.")
     def retrieve(self, request, slug=None):
-        """
+        """The method that processes a GET request to the article_content endpoint and returns a single 
+        serialized Article object based on the slug specified in the url.
+
+        Args:
+            request (request): The GET request object recieved from the query.
+
+            slug (str): The slug field that corresponds to the Article returned.
+
+        Returns:
+            rest_framework.response.Response: The HTTP response object containing the Article full content.
         """
         if slug is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -103,9 +162,43 @@ class ArticleViewSet(viewsets.ViewSet):
         serialized_article = ArticleSerializer(article, context={'request':request})
 
         return Response(serialized_article.data, status=status.HTTP_202_ACCEPTED)
-
+    
+    @swagger_auto_schema(operation_description="Placeholder for PUT request endpoint schema.")
     def update(self, request, slug=None):
-        """
+        """The method that processes PUT requests to the API allowing Article objects specified by the 
+        slug field to be created or updated.
+
+        The method contains the main logic for creating an article if one does not exist with the provided slug
+        field from the method that deals with POST requests - 'create()'. If an article does exist with the provided
+        slug field then that article is fully updated using the body params provided in the request.
+
+        Because this method processes PUT requests, it requires all Article fields necessary to create a new article to be
+        present in the request body to sucessfully update/create an Article instance.
+        
+        These fields are:
+
+            title (str): The article title
+            
+            body (str): The HTML body content that is escaped in order to prevent malicious injection.
+
+            author (str): The author of the post, which must correspond to a CustomUser instance via its
+                username field.
+            
+            category (str): The main category the article falls under. This value corresponds with the 'name'
+                field of an ArticleCategory object. If it does not, a new ArticleCategory object is created.
+
+        Any fields in the request body that differ from the fields found in the Article instance will be updated. This
+        is done via the django model method 'update_or_create()'. 
+        
+        Args:
+            request (request): The PUT request object recieved from the query.
+
+            slug (str): The slug field that corresponds to the Article to be created or updated..
+
+        Returns:
+            rest_framework.response.Response: The HTTP response object containing the new or updated article along with
+                a boolean indicated if a new article has been created or if an existing one has been updated. 
+
         """
         # Extracting body params used to update the 
         body_unicode = request.body.decode('utf-8')
@@ -150,8 +243,24 @@ class ArticleViewSet(viewsets.ViewSet):
                 }, 
             status=status.HTTP_202_ACCEPTED)
 
+    @swagger_auto_schema(operation_description="Placeholder for PATCH request endpoint schema.")
     def partial_update(self, request, slug=None):
-        """
+        """The method that processes the PATCH request sent to the article_content endpoint and allows an Article
+        instance to be edited based on the slug provided.
+
+        This method, unlike the 'update()' method only processes PATCH requests meaning it does not allow for the
+        creation of a new Article instance if there is no corresponding article with the provided slug field. The 
+        method also does not require all Article fields to be provided in the request body to update an existing
+        instance. Only the Article fields that are present in the request body will be updated.
+        
+        Args:
+            request (request): The PATCH request object recieved from the query.
+
+            slug (str): The slug field that corresponds to the Article being updated.
+
+        Return:
+            rest_framework.response.Response: The HTTP response object containing the Article that has been updated.
+
         """
         # Loading the body params from the request to update the request:
         body_unicode = request.body.decode('utf-8')
@@ -200,9 +309,20 @@ class ArticleViewSet(viewsets.ViewSet):
         serialized_article = ArticleSerializer(article, context={"request":request})
 
         return Response(serialized_article.data, status=status.HTTP_202_ACCEPTED)
-
+    
+    @swagger_auto_schema(operation_description="Placeholder for DELETE request endpoint schema.")
     def destroy(self, request, slug=None):
-        """
+        """The method that processes DELETE requests made to the article_content endpoint and deletes 
+        an Article instance based on the provided slug field.
+
+        Args:
+            request (request): The DELETE request object recieved from the query.
+
+            slug (str): The slug field that corresponds to the Article being deleted.
+
+        Returns:
+            rest_framework.response.Response: The HTTP response object containing the Article that has been deleted.
+
         """
         # Querying article based on slug to remove:
         article = Article.objects.get(slug=slug)
