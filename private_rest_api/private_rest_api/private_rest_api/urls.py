@@ -40,5 +40,8 @@ urlpatterns = [
     path('reddit/', include("data_APIs.reddit_api.urls")),
 
     # Twitter REST API urls:
-    path('twitter/', include('data_APIs.twitter_api.urls'))
+    path('twitter/', include('data_APIs.twitter_api.urls')),
+
+    # Articles REST API urls:
+    path('articles/', include("data_APIs.articles_api.urls"))
 ]

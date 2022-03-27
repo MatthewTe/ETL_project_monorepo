@@ -16,3 +16,6 @@ __all__ = ("celery_app")
 "Twitter Application"
 # TODO: Add API endpoint that serves trending data upon GET.
 # TODO: Look at the code necessary to track tweets of specific figures.
+
+"Articles API"
+#TODO: Create framework for a full CRUD API for blogposts.
