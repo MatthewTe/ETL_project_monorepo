@@ -18,10 +18,11 @@ from .serializers import ArticleSerializer, ArticleSummarySerializer, ArticleCat
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-# TODO: Add openapi documentation for ArticleViewSet
+"Article Views"
 # TODO: Add pagination and filtering to the ArticleViewSet list() function.
 # TODO: Decide if HTML needs to be escaped in the POST request or in the retrieve function.
 
+"Category Views"
 # TODO: Add documentation for ArticleCategoryViewSet.
 # TODO: Add openapi documentation for the ArticleCategoryViewSet.
 # TODO: For all 400 errors, seralize and include error msg in the Response object
@@ -37,7 +38,7 @@ class ArticleViewSet(viewsets.ViewSet):
     #serializer_class = ArticleSerializer
     lookup_field = "slug"
 
-    @swagger_auto_schema(operation_description="Placeholder for list() GET endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that provides Article Summary information for all Articles.")
     def list(self, request):
         """The method that recives a GET request and returns multiple article summary objects.
 
@@ -62,7 +63,7 @@ class ArticleViewSet(viewsets.ViewSet):
         
         return Response(seralized_queryset.data, status=status.HTTP_202_ACCEPTED)
     
-    @swagger_auto_schema(operation_description="Placeholder for POST request endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that allows for the creation of an Article via a POST request.")
     def create(self, request):
         """The method that proceses the POST request used to create Article objects and store them in the 
         database.
@@ -136,7 +137,7 @@ class ArticleViewSet(viewsets.ViewSet):
             print(error)
             return Response(status=status.HTTP_400_BAD_REQUEST)
     
-    @swagger_auto_schema(operation_description="Placeholder for the single Artilce GET request endpoint.")
+    @swagger_auto_schema(operation_description="The endpoint that allows for the querying of individual Articles based on its slug.")
     def retrieve(self, request, slug=None):
         """The method that processes a GET request to the article_content endpoint and returns a single 
         serialized Article object based on the slug specified in the url.
@@ -163,7 +164,7 @@ class ArticleViewSet(viewsets.ViewSet):
 
         return Response(serialized_article.data, status=status.HTTP_202_ACCEPTED)
     
-    @swagger_auto_schema(operation_description="Placeholder for PUT request endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that allows for an Article to be fully updated or created via a PUT request using its slug param.")
     def update(self, request, slug=None):
         """The method that processes PUT requests to the API allowing Article objects specified by the 
         slug field to be created or updated.
@@ -243,7 +244,7 @@ class ArticleViewSet(viewsets.ViewSet):
             }, 
             status=status.HTTP_202_ACCEPTED)
 
-    @swagger_auto_schema(operation_description="Placeholder for PATCH request endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that allows for an Article to be fully updated via a PATCH request using its slug param.")
     def partial_update(self, request, slug=None):
         """The method that processes the PATCH request sent to the article_content endpoint and allows an Article
         instance to be edited based on the slug provided.
@@ -310,7 +311,7 @@ class ArticleViewSet(viewsets.ViewSet):
 
         return Response(serialized_article.data, status=status.HTTP_202_ACCEPTED)
     
-    @swagger_auto_schema(operation_description="Placeholder for DELETE request endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that allows for an Article to be deleted via a slug param.")
     def destroy(self, request, slug=None):
         """The method that processes DELETE requests made to the article_content endpoint and deletes 
         an Article instance based on the provided slug field.
@@ -343,7 +344,7 @@ class ArticleCategoryViewSet(viewsets.ViewSet):
     queryset = ArticleCategory.objects.all()
     lookup_field = "name"
 
-    @swagger_auto_schema(operation_description="Placeholder for list() GET endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint for returning all Categories.")
     def list(self, request):
         """The method receives the GET request for the article categories endpoint and returns
         all seralized article categories.
@@ -363,7 +364,7 @@ class ArticleCategoryViewSet(viewsets.ViewSet):
 
         return Response(serialized_categories.data, status=status.HTTP_202_ACCEPTED)
     
-    @swagger_auto_schema(operation_description="Placeholder for POST request endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint for creating a Category via a POST request.")
     def create(self, request):
         """The method that receives the POST request for the article categories endpoint and creates
         an Article Category object based on the request body parameters.
@@ -396,7 +397,7 @@ class ArticleCategoryViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-    @swagger_auto_schema(operation_description="Placeholder for PUT requests endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that allows a Category to be fully updated or created via a PUT request using its name param.")
     def update(self, request, name=None):
         """The method that recieves PUT requests and updates the Article Category object specified by 
         the provided name field based on the body content of the incoming request. 
@@ -443,7 +444,7 @@ class ArticleCategoryViewSet(viewsets.ViewSet):
             }, 
             status=status.HTTP_202_ACCEPTED)
 
-    @swagger_auto_schema(operation_description="Placeholder for DELETE request endpoint schema.")
+    @swagger_auto_schema(operation_description="The endpoint that allows for a Category to be deleted based on the name param.")
     def destroy(self, request, name=None):
         """The method that recieves the DELETE request and removes the Article Category object from
         the database specified by the name param.
