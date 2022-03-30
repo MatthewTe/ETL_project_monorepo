@@ -12,7 +12,7 @@ import json
 # Importing article models and serializers:
 from api_core.models import CustomUser
 from .models import Article, ArticleCategory
-from .serializers import ArticleSerializer, ArticleSummarySerializer
+from .serializers import ArticleSerializer, ArticleSummarySerializer, ArticleCategorySerializer
 
 # Importing schema documentation methods:
 from drf_yasg import openapi
@@ -22,9 +22,9 @@ from drf_yasg.utils import swagger_auto_schema
 # TODO: Add pagination and filtering to the ArticleViewSet list() function.
 # TODO: Decide if HTML needs to be escaped in the POST request or in the retrieve function.
 
-# TODO: Populate a ArticleCategoryViewSet with only list, create, destroy. 
 # TODO: Add documentation for ArticleCategoryViewSet.
 # TODO: Add openapi documentation for the ArticleCategoryViewSet.
+# TODO: For all 400 errors, seralize and include error msg in the Response object
 
 class ArticleViewSet(viewsets.ViewSet):
     """The main viewset for performing CRUD functions on the Article model.
@@ -34,7 +34,7 @@ class ArticleViewSet(viewsets.ViewSet):
 
     """
     queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+    #serializer_class = ArticleSerializer
     lookup_field = "slug"
 
     @swagger_auto_schema(operation_description="Placeholder for list() GET endpoint schema.")
@@ -240,7 +240,7 @@ class ArticleViewSet(viewsets.ViewSet):
             {
                 "Created": created_status,
                 "Article": serialized_article.data
-                }, 
+            }, 
             status=status.HTTP_202_ACCEPTED)
 
     @swagger_auto_schema(operation_description="Placeholder for PATCH request endpoint schema.")
@@ -334,16 +334,134 @@ class ArticleViewSet(viewsets.ViewSet):
         return Response(serialized_article.data, status=status.HTTP_202_ACCEPTED)
 
 class ArticleCategoryViewSet(viewsets.ViewSet):
+    """The viewset for performing limited CRUD functions on the Article Category model.
+
+    It only performs limited CRUD operations as some additional functionality such as the 'partial update'
+    functions are not necessary for the API
+
     """
-    """
+    queryset = ArticleCategory.objects.all()
+    lookup_field = "name"
+
+    @swagger_auto_schema(operation_description="Placeholder for list() GET endpoint schema.")
     def list(self, request):
-        pass
+        """The method receives the GET request for the article categories endpoint and returns
+        all seralized article categories.
 
+        Args:
+            request (request): The GET request object recieved from the query.
+
+        Returns:
+            rest_framework.response.Response: The HTTP response object containing all seralized Article Category objects.
+
+        """
+        # Querying all article categories:
+        categories = ArticleCategory.objects.all()
+
+        # Serializing the Category objects:
+        serialized_categories = ArticleCategorySerializer(categories, many=True, context={'request':request})
+
+        return Response(serialized_categories.data, status=status.HTTP_202_ACCEPTED)
+    
+    @swagger_auto_schema(operation_description="Placeholder for POST request endpoint schema.")
     def create(self, request):
-        pass
+        """The method that receives the POST request for the article categories endpoint and creates
+        an Article Category object based on the request body parameters.
 
-    def update(self, request):
-        pass
+        Args:
+            request (request): The HTTP POST request object recieved from the query.
 
-    def destroy(self, request):
-        pass
+        Returns:
+            rest_framework.response.Response: The HTTP response object containing the Category object that has been created.
+
+        """
+        # Extracting params from request body to create Article object:
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+
+        # Extracting body fields:
+        name = body["name"]
+
+        try:
+            # Creating the new Category:
+            category = ArticleCategory.objects.create(name=name)
+
+            # Serializing Category object to be returned via the response:
+            serialized_category = ArticleCategorySerializer(category, context={"request":request})            
+            
+            return Response(serialized_category.data, status=status.HTTP_202_ACCEPTED)
+        
+        except Exception as error:
+            print(error)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+    @swagger_auto_schema(operation_description="Placeholder for PUT requests endpoint schema.")
+    def update(self, request, name=None):
+        """The method that recieves PUT requests and updates the Article Category object specified by 
+        the provided name field based on the body content of the incoming request. 
+
+        It processes PUT requests not PATCH requests so all categroy fields need to be provided in the
+        request body for the Category object to be updated.
+                
+        These fields are:
+
+            name (str): The name of the Category
+            
+        Any fields in the request body that differ from the fields found in the Category instance will be updated. This
+        is done via the django model method 'update_or_create()'. 
+        
+        Args:
+            request (request): The PUT request object recieved from the query.
+
+            name (str): The name field that corresponds to the Article to be created or updated.
+        
+        Returns:
+            rest_framework.response.Response: The HTTP response object containing the new or updated Category along with
+                a boolean indicated if a new Category has been created or if an existing one has been updated.
+
+        """
+        # TODO: Add body param extraction logic once more fields get added to the Category model.
+        # Extracting body params used to update the 
+        #body_unicode = request.body.decode('utf-8')
+        #body = json.loads(body_unicode)
+
+        # Performing an update or create operation for a category:
+        obj, created_status = ArticleCategory.objects.update_or_create(
+            name=name,
+
+            defaults = {
+            }
+        )
+        # Serializing the article that has been updated to return in a request:
+        serialized_article = ArticleCategorySerializer(obj, context={'request':request})
+
+        return Response(
+            {
+                "Created": created_status,
+                "Article": serialized_article.data
+            }, 
+            status=status.HTTP_202_ACCEPTED)
+
+    @swagger_auto_schema(operation_description="Placeholder for DELETE request endpoint schema.")
+    def destroy(self, request, name=None):
+        """The method that recieves the DELETE request and removes the Article Category object from
+        the database specified by the name param.
+
+        Args:
+            request (request): The DELETE request object recieved from the query.
+            
+            name (str): The name of the Category to be deleted.
+
+        Returns:
+            rest_framework.response.Response: The Response object containing the Category object deleted. 
+        """
+        # Querying the category object:
+        category = ArticleCategory.objects.get(name=name)
+
+        # Serializing the article to return in the response:
+        serialized_category = ArticleCategorySerializer(category, context={'request':request})
+        category.delete()
+
+        return Response(serialized_category.data, status=status.HTTP_202_ACCEPTED)
+

@@ -6,10 +6,13 @@ from django.template.defaultfilters import slugify
 from api_core.models import CustomUser  
 
 class ArticleCategory(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name_plural = "Article Categories"
 
 class Article(models.Model):
     """The main database model for written articles. It stores the main components of
