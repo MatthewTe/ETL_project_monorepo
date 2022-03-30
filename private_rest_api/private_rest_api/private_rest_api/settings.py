@@ -47,7 +47,8 @@ INSTALLED_APPS = [
 
     # Project specific API urls:
     "data_APIs.reddit_api",
-    "data_APIs.twitter_api"
+    "data_APIs.twitter_api",
+    "data_APIs.articles_api"
 ]
 
 MIDDLEWARE = [
