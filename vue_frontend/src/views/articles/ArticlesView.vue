@@ -1,37 +1,20 @@
 <template>
     <div class="articles">
-        <ArticlePreview :article_preview="article_preview" v-for="(article_preview, index) in test_blog_posts" :key="index" />
+        <ArticleCategory :category="category" v-for="(category, index) in categories" :key="index"/>
     </div>
 </template>
 
 <script>
-import ArticlePreview from '@/components/articles/ArticlePreview.vue'
+import ArticleCategory from '@/components/articles/ArticleCategory.vue'
 
 export default {
     name: "ArticlesIndexView",
-    components: { ArticlePreview },
+    components: { ArticleCategory },
     data() {
         return {
-            test_blog_posts: [
-                {
-                    title: "This is the title of Article 1",
-                    summary: "A test summary for the article 1",
-                    author: "Matthew Teelucksingh",
-                    slug: "this-is-the-title-of-article-1"
-
-                },
-                {
-                    title: "This is the title of Article 2",
-                    summary: "A test summary for the article 2",
-                    author: "Matthew Teelucksingh",
-                    slug: "this-is-the-title-of-article-2"
-                },
-                {
-                    title: "This is the title of Article 3",
-                    summary: "A test summary for the article 3",
-                    author: "Matthew Teelucksingh",
-                    slug: "this-is-the-title-of-article-3"
-                },
+            categories: [
+                {name:"North Korea"},
+                {name:"Economics "}
             ]
         }
     }
