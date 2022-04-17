@@ -9,10 +9,12 @@ from rest_framework import status
 # Importing data manipulation packages:
 import json
 
-# Importing article models and serializers:
+# Importing article models, serializers, filters and paginators:
 from api_core.models import CustomUser
 from .models import Article, ArticleCategory
 from .serializers import ArticleSerializer, ArticleSummarySerializer, ArticleCategorySerializer
+from .pagination import ArticleSummaryPagination
+from .filters import ArticleSummaryFilter
 
 # Importing schema documentation methods:
 from drf_yasg import openapi
@@ -58,10 +60,21 @@ class ArticleViewSet(viewsets.ViewSet):
         # Creating the main queryset:
         queryset = Article.objects.all()
 
+        # Creating an configuring pagination:
+        paginator = ArticleSummaryPagination()
+
+        # Applying filters based on query parameters in GET request:
+        filterset = ArticleSummaryFilter(request.GET, queryset=queryset)
+        if filterset.is_valid():
+            queryset = filterset.qs
+
+        # Paginating the queryset:
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
+
         # Seralizing the Article Queryset through the Summary Serializer to create a summary dataset:
         seralized_queryset = ArticleSummarySerializer(queryset, many=True, context={'request':request})
         
-        return Response(seralized_queryset.data, status=status.HTTP_202_ACCEPTED)
+        return paginator.get_paginated_response(seralized_queryset.data)
     
     @swagger_auto_schema(operation_description="The endpoint that allows for the creation of an Article via a POST request.")
     def create(self, request):
