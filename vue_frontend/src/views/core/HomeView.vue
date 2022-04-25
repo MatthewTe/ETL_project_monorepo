@@ -1,16 +1,25 @@
 <template>
   <div class="home">
-    <HelloWorld/>
+    <HomepageMasthead/>
+    <HomepageMainSectionCards/>
+    <HomepageDataDashboardSectionCards/>
+    <HomepageArticleCards/>
   </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/core/HelloWorld.vue'
+import HomepageMasthead from '@/components/core/Homepage_Masthead.vue'
+import HomepageMainSectionCards from '@/components/core/Homepage_Section_Cards.vue'
+import HomepageDataDashboardSectionCards from '@/components/core/Homepage_Dashboard_Section_Cards.vue'
+import HomepageArticleCards from '@/components/core/Homepage_Article_Cards_Section.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    HomepageMasthead,
+    HomepageMainSectionCards,
+    HomepageDataDashboardSectionCards,
+    HomepageArticleCards
   }
 }
 </script>
