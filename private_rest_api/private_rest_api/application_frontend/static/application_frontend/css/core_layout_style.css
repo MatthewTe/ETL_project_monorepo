@@ -1,0 +1,58 @@
+body{
+    font-family: "Times New Roman", Times, serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    background-color: #292929 !important;
+    --secondary-color: #FE828C;
+    --text-color: #bccadb;
+}
+
+.navbar {
+    padding: 30px;
+    background-color: black !important;
+  }
+  .navbar{
+    height: 70px !important;
+  }
+  nav a {
+    font-weight: bold;
+    color: #bccadb !important;
+  }
+  .navbar-brand:hover{
+    color:#FE828C !important;
+  }
+  .nav-link{
+    color: #bccadb;
+  }
+  .nav-link:hover{
+    color: #FE828C !important;
+}
+
+footer{
+  background: #1A1818;
+  padding-top: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 20px;
+}
+
+.bottom-menu ul{
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  color: #8D8C8C;
+  list-style-type: disc;
+}
+.bottom-menu li{
+  list-style-type: none;
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 10px;
+  font-size: inherit;
+}
+.bottom-menu li a{
+  font-size: 14px;
+  color: var(--text-color);
+  text-decoration: none;
+}

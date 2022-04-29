@@ -1,0 +1,34 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block css_styles %}
+<link rel="stylesheet" href="{% static 'application_frontend/css/article_homepage_styling.css' %}">
+{% endblock css_styles %}
+
+{% block title %} Articles {% endblock title %}
+
+{% block body %}
+<div class="main_category">
+    {% if request.user.is_staff %}
+    <div><a href="{% url 'create_article' %}">+ Create Article</a></div>
+    {% endif %}
+    
+    {% for category, articles in categories.items %}
+    <h2 id="category_title">{{category}}</h2>
+    <div class="article_category_grid">
+        {% for article in articles %}
+        <div class="article_summary_card">
+            <h3 class="article_title">{{article.title}}</h3>
+            <p class="article_summary">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae blanditiis veritatis maxime quasi vitae cupiditate dolores earum quis perferendis eligendi dolor ut, placeat iure animi! Accusantium veritatis omnis nemo alias.</p>
+            <a class="link" href="{% url 'full_article' slug=article.slug %}">Read More</a>
+            {% if request.user.is_staff %}
+            <a class="link" href="{% url 'create_article' id=article.id %}">Edit</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endfor %}
+    
+</div>
+{% endblock body %}

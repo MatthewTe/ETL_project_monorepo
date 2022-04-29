@@ -25,13 +25,20 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    # Frontend urls:
+    path("", include("application_frontend.urls")),
+
+    # Admin:
     path('admin/', admin.site.urls),
+
+    # TinyMCE (text-editor) urls:
+    path('tinymce/', include('tinymce.urls')),
 
     # DRF urls:
     path('api-auth/', include('rest_framework.urls')),
 
     # API schema:
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     
     # Core Functionality for API Routes:
     path("api_core/", include("api_core.urls")),

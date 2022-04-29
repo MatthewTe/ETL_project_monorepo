@@ -15,6 +15,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         depth = 1
 
 class ArticleSummarySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     title = serializers.CharField()
     author = serializers.CharField(source="author.username")
     category = serializers.CharField(source="category.name")
@@ -24,7 +25,7 @@ class ArticleSummarySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Article
-        fields = ["title", "author", "category", "created_at", "last_updated", "slug"]
+        fields = ["title", "author", "category", "created_at", "last_updated", "slug", "id"]
         depth = 1
 
 class ArticleCategorySerializer(serializers.ModelSerializer):

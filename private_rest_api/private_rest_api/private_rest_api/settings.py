@@ -41,11 +41,15 @@ INSTALLED_APPS = [
     "djoser",
     "drf_yasg",
     "django_filters",
+    "tinymce",
+
+    # Frontend Application:
+    "application_frontend",
 
     # Core API Logic:   
     "api_core",
 
-    # Project specific API urls:
+    # Project specific API Applications:
     "data_APIs.reddit_api",
     "data_APIs.twitter_api",
     "data_APIs.articles_api"
@@ -67,7 +71,7 @@ ROOT_URLCONF = 'private_rest_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(os.path.join(BASE_DIR, "templates"))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
