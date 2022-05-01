@@ -1,0 +1,29 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block css_styles %}
+<link rel="stylesheet" href="{% static 'application_frontend/css/full_article_styling.css' %}">
+{% endblock css_styles %}
+
+{% block body %}
+<div class="full_article">
+        <div class="by_line">
+            <h1>{{article.title}}</h1>
+            <div class="by_line_secondary">
+                <div><a class="author">By: {{article.author}}</a></div>
+                <div><a class="created_at">Last Updated: {{article.last_updated}}</a></div>       
+                <div><a class="author">Published: {{article.created_at}}</a></div>
+            </div>  
+            
+            <div class="head_img"><img src="{{article.image}}" alt=""></div>
+            
+        </div>
+
+    <div class="main_html_content">
+        {% autoescape off %}
+        {{article.body}}
+        {% endautoescape %}
+    </div>
+
+</div>
+{% endblock body %}

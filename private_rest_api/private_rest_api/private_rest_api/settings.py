@@ -41,11 +41,15 @@ INSTALLED_APPS = [
     "djoser",
     "drf_yasg",
     "django_filters",
+    "tinymce",
+
+    # Frontend Application:
+    "application_frontend",
 
     # Core API Logic:   
     "api_core",
 
-    # Project specific API urls:
+    # Project specific API Applications:
     "data_APIs.reddit_api",
     "data_APIs.twitter_api",
     "data_APIs.articles_api"
@@ -67,7 +71,7 @@ ROOT_URLCONF = 'private_rest_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(os.path.join(BASE_DIR, "templates"))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -207,9 +211,44 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+if DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Media Files:
+if DEBUG:
+    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
+    MEDIA_URL = '/media/'
+else:
+    # Media Urls for File Uploads:
+    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
+    MEDIA_URL = '/media/'
+
+# Importing Digital Ocean static file management files:
+if DEBUG:
+    pass
+else:
+    from .cdn.conf import (
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY,
+    AWS_STORAGE_BUCKET_NAME,
+    AWS_S3_ENDPOINT_URL,
+    AWS_S3_OBJECT_PARAMETERS,
+    AWS_LOCATION,
+    DEFAULT_FILE_STORAGE,
+    STATICFILES_STORAGE
+)   
+
+# Frontend styling for TinyMCE:
+TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js'
+TINYMCE_COMPRESSOR = False
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "api_core.CustomUser"

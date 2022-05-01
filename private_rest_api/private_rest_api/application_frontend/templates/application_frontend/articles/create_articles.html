@@ -1,0 +1,31 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block head %}
+{{form.media}}
+{% endblock head %}
+
+{% block css_styles %}
+<link rel="stylesheet" href="{% static 'application_frontend/css/create_article_styling.css' %}">
+{% endblock css_styles %}
+
+{% block body %}
+<div class="main_article_creation">
+    <form method="post">
+        {% csrf_token %}
+        <div class="title">
+            <h2>Title</h2>
+            {{form.title}}
+        </div>
+        <div class="dropdown_grid">
+            <div><h2>Author:</h2>{{form.author}}</div>
+            <div><h2>Category:</h2> {{form.category}}</div>
+        </div>
+        <div class="body_content">
+            <h2>Main Content:</h2>
+            {{form.body}}
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock body %}
