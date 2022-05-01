@@ -14,6 +14,9 @@ services:
     ports: 
       - "80:80"
     container_name: nginx-reverse-proxy
+    depends_on: 
+      - private-rest-api
+    restart: always
 
   # Django REST API:
   private-rest-api:
