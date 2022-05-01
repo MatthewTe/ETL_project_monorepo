@@ -12,7 +12,7 @@ services:
     networks: 
       - rest_api_network
     ports: 
-      - "81:81" 
+      - "80:80"
     container_name: nginx-reverse-proxy
 
   # Django REST API:
