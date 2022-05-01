@@ -5,6 +5,7 @@ django-filter==21.1
 django-storages==1.12.3
 django-celery-beat==2.2.1
 gunicorn==20.0.4
+Pillow==9.1.0
 
 # Process Scheudler packages:
 Redis==4.1.3

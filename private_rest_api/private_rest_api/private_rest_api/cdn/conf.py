@@ -11,5 +11,5 @@ AWS_S3_OBJECT_PARAMETERS = {
 
 AWS_LOCATION = "https://django-research-static.nyc3.digitaloceanspaces.com"
 
-DEFAULT_FILE_STORAGE = "research_site.cdn.backends.MediaRootS3Boto3Storage"
-STATICFILES_STORAGE = "research_site.cdn.backends.StaticRootS3Boto3Storage"
+DEFAULT_FILE_STORAGE = "private_rest_api.cdn.backends.MediaRootS3Boto3Storage"
+STATICFILES_STORAGE = "private_rest_api.cdn.backends.StaticRootS3Boto3Storage"
