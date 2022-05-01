@@ -25,6 +25,9 @@ class Article(models.Model):
         body (tinymce_models.HTMLField): The main content of the article. It is stored as filtered HTML content using the
             tinyMCE model field that behaves as a normal TEXT field.
 
+        img (models.ImageField): The image that is used as the thumbnail for the article and the main image for the 
+            full article.
+
         author (models.ForeignKey): The author of the article that is connected via a foreign key to the
             main User model that the django project uses.
 
@@ -41,6 +44,7 @@ class Article(models.Model):
     """
     title = models.CharField(max_length=250)
     body = tinymce_models.HTMLField()
+    image = models.ImageField(null=True, blank=True, upload_to="ceteris_paribus/articles/")
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -3,9 +3,9 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    background-color: #292929 !important;
-    --secondary-color: #FE828C;
-    --text-color: #bccadb;
+    background-color: white !important;
+    --secondary-color: #1d3d63;
+    --text-color: black;
 }
 
 .navbar {
@@ -41,7 +41,7 @@ footer{
   margin: 0;
   padding: 20px;
   text-align: center;
-  color: #8D8C8C;
+  color: white;
   list-style-type: disc;
 }
 .bottom-menu li{
@@ -53,6 +53,6 @@ footer{
 }
 .bottom-menu li a{
   font-size: 14px;
-  color: var(--text-color);
+  color: white;
   text-decoration: none;
 }

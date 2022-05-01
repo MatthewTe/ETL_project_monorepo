@@ -14,16 +14,29 @@
     {% endif %}
     
     {% for category, articles in categories.items %}
-    <h2 id="category_title">{{category}}</h2>
+   <h3 id="category_title"><a class="title_categorry_link" href="{% url 'article_category' category=category %}">{{category}}</a></h3>
     <div class="article_category_grid">
         {% for article in articles %}
+        
         <div class="article_summary_card">
-            <h3 class="article_title">{{article.title}}</h3>
-            <p class="article_summary">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae blanditiis veritatis maxime quasi vitae cupiditate dolores earum quis perferendis eligendi dolor ut, placeat iure animi! Accusantium veritatis omnis nemo alias.</p>
-            <a class="link" href="{% url 'full_article' slug=article.slug %}">Read More</a>
-            {% if request.user.is_staff %}
-            <a class="link" href="{% url 'create_article' id=article.id %}">Edit</a>
-            {% endif %}
+            <a class="main_article_link" href="{% url 'full_article' slug=article.slug %}">
+                <div class=card_img>
+                    {% if article.image == None %}
+                    <img src="{% static 'application_frontend/imgs/test.jpg' %}" alt="">
+                    {% else %}
+                    <img src="{{article.image}}" alt="">
+                    {% endif %}    
+                </div>
+                
+                <div class="article_content">
+                    <h4 class="article_title">{{article.title|truncatechars:60}}</h4>
+                    <div class="button_grid">
+                        {% if request.user.is_staff %}
+                        <a class="link" href="{% url 'create_article' id=article.id %}">Edit</a>
+                        {% endif %}        
+                    </div>    
+            </a>    
+            </div>
         </div>
         {% endfor %}
 

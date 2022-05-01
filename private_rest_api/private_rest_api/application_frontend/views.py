@@ -1,5 +1,6 @@
 # Importing native django packages:
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import user_passes_test
 
 # Importing view logic:
 from .article_logic import get_article_categories, get_article_summary, get_full_article
@@ -8,10 +9,26 @@ from .article_logic import get_article_categories, get_article_summary, get_full
 from data_APIs.articles_api.forms import ArticleForm
 from data_APIs.articles_api.models import Article 
 
+# Method that checks if user is a staff member: 
+def is_not_staff(user):
+    "Checks if the user is a staff member. This method is used in permission decorators."
+    return user.is_staff
+
 # Homepage Views:
 def render_homepage(request):
-    """Function that renders the main homepage for the frontend."""
-    return render(request, "application_frontend/homepage/homepage.html", context={})
+    """Function that renders the main homepage for the frontend. 
+    
+    In order to populate the homepage it requires article data queried from 
+    the backend.
+
+    """
+    context = {}
+
+    # Querying articles from backend:
+    articles = get_article_summary(page_size=5)
+    context["articles"] = articles
+
+    return render(request, "application_frontend/homepage/homepage.html", context=context)
 
 # Article Views:
 def render_article_homepage(request):
@@ -45,6 +62,22 @@ def render_article_full(request, slug:str):
 
     return render(request, "application_frontend/articles/full_article.html", context=context)
 
+def render_article_category(request, category:str):
+    """The view that renders the front-end template for dispalying all articles within a specific category.
+
+    Args:
+        category (str): The category that will be used to filter all articles.
+    
+    """
+    context = {}
+    # Making request for article summaries based on the category provided:
+    articles = get_article_summary(category=category, page_size=50)
+    context["articles"] = articles
+
+    return render(request, "application_frontend/articles/article_category_page.html", context=context)
+
+
+@user_passes_test(is_not_staff)
 def create_article(request, id=None):
     """The view that contains the logic for creating a new article or for editing one if it already exists.
 

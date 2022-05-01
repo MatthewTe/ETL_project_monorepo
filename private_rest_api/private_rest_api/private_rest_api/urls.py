@@ -1,6 +1,8 @@
 # Importing native django methods:
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Importing DRF methods:
 from rest_framework.schemas import get_schema_view
@@ -50,5 +52,10 @@ urlpatterns = [
     path('twitter/', include('data_APIs.twitter_api.urls')),
 
     # Articles REST API urls:
-    path('articles/', include("data_APIs.articles_api.urls"))
+    path('articles/', include("data_APIs.articles_api.urls")), 
+
 ]
+
+# Adding development url for uploading and accessing images:
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

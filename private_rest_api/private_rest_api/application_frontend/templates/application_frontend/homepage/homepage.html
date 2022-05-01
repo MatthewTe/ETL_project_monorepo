@@ -11,12 +11,6 @@
 <div class="homepage_masthead">
     <h1>Explore our data, analysis, research and opinions.</h1>
     <p>Open source data dashboards, articles and APIs about international economics, international relations and foregin policy</p>
-  
-  <div class="homepage_masthead_button_grid">
-    <div class="masthead_button"><a class="hidden_link" href="{% url 'dashboard_homepage' %}">Econ, Defense and Foreign Policy Dashboards</a></div>
-    <div class="masthead_button"><a class="hidden_link" href="{% url 'articles_homepage' %}">Our Opinions and Research</a></div>
-    <div class="masthead_button"><a class="hidden_link" href="{% url 'documentation_homepage' %}">Get Public API Access</a></div>
-  </div>  
 </div>
 
 <div class="homepage_section_cards">
@@ -33,16 +27,16 @@
             <div class="card_image"><img src="{% static 'application_frontend/imgs/korean_main_thumbnail.jpeg' %}" alt=""></div>
             <div class="card_content">
                 <a class="hidden_link" href="{% url 'north_korea_homepage' %}"><h4>The Korean-Peninsula and its unique issues and international position</h4></a>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium facilis earum velit nobis deserunt. Reprehenderit beatae molestiae deserunt id, quia error itaque, esse quaerat rerum dolores minus ad odit necessitatibus.</p>
+                <p>The modern geopolitical situation on the Korean peninsula arose from key decisions made during the final years for the second world war’s pacific theater. The division of the peninsula and the subsequent war has resulted in a political situation that has been a focus of international relations scholars, policy analysts and multilateral institutions ever since. Ceteris paribus has created a section of the site dedicated to understanding the tensions between the ROK, DPRK, the US and how these tensions are likely to develop into the 21st century.</p>
             </div>
         </div>
 
         <div class="main_section_card">
             <div class="card_image">
-                <img src="{% static 'application_frontend/imgs/korean_main_thumbnail.jpeg' %}" alt=""></div>
+                <img src="{% static 'application_frontend/imgs/REST_API.jpg' %}" alt=""></div>
             <div class="card_content">
                 <a class="hidden_link" href="{% url 'documentation_homepage' %}"><h4>See documentation for how to use our public data APIs</h4></a>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae odit quod eos praesentium doloribus quaerat aliquam blanditiis voluptatibus minus vel fuga, animi autem dolor, quibusdam consequatur excepturi. Neque, aut voluptatibus.</p>
+                <p>A core component of the Ceteris Paribus project is to extract and transform interesting data that relates to our topics of interest. This data ingestion powers our dashboards and elements of our unique analysis. We provide public facing access to our database through our REST API services.</p>
             </div>
         </div>
     </div>
@@ -53,10 +47,10 @@
         <h2>Data Dashboards</h2>
         <div class="main_section_card_grid">
             <div class="main_section_card">
-                <div class="card_image"><img src="{% static 'application_frontend/imgs/test.jpg' %}" alt=""></div>
+                <div class="card_image"><img src="{% static 'application_frontend/imgs/masthead_w_sipri.jpg' %}" alt=""></div>
                 <div class="card_content">
                     <h4>Stockholm International Peace Research Institute Arms Dashboards</h4>
-                    <p>Ceteris paribus publishes various writings ranging from formal articles and whitepapers about our data collection and dashboards to fully opinionated articles by authors discussing contemporary issues mainly in the fields of international economics and foregin policy (or geopolitics depending on where you’re from).</p>
+                    <p>The Stockholm International Peace Research Institute is a Stockholm institute that “provides data, analysis and recommendations for armed conflict, military expenditure and arms trade as well as disarmament and arms control”. To that end it provides publicly available information about the global state of arms trade and production, which we use to create dashboards that communicate the ideas described in the raw data.</p>
                 </div>
                 
             </div>
@@ -65,7 +59,7 @@
                 <div class="card_image"><img src="{% static 'application_frontend/imgs/Social_Media_Thumbnail.png' %}" alt=""></div>
                 <div class="card_content">
                     <h4>Social Media Dashboards</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium facilis earum velit nobis deserunt. Reprehenderit beatae molestiae deserunt id, quia error itaque, esse quaerat rerum dolores minus ad odit necessitatibus.</p>
+                    <p>Ceteris paribus has multiple data ingestion projects currently running. One of these projects involves mining public data from popular social media services in order to perform sentiment analysis about key areas and issues. You can view dashboards showing our sentiment analysis or the status of our pipelines.</p>
                 </div>
             </div>
 
@@ -74,7 +68,7 @@
                     <img src="{% static 'application_frontend/imgs/Zotero_Dashboard.png' %}" alt=""></div>
                 <div class="card_content">
                     <h4>Zotero and Research Management Dashboards</h4>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae odit quod eos praesentium doloribus quaerat aliquam blanditiis voluptatibus minus vel fuga, animi autem dolor, quibusdam consequatur excepturi. Neque, aut voluptatibus.</p>
+                    <p>A key component of Ceteris paribus involves reading articles, academic literature, books and whitepapers about relevant topics in economics, foreign policy and international relations. To that end there are several tools that help visualize the research that we conduct. For example our Zotero account dashboards and author network generator.</p>
                 </div>
             </div>
         </div>
@@ -85,81 +79,23 @@
     <h3>Recent Articles</h3>
     <div class="homepage_article_grid">
         
-        <div class="article_card">
-            <div class="article_card_content">
-                <h4 class="article_card_title">The world population increased from 1 billion in 1800 to 7.9 billion today.</h4>
-                <div class="article_info">
-                    <p><strong>By</strong>: Matthew Teelucksingh</p>
-                    <p><strong>Published on</strong>: 25/04/2022</p>
-                </div>
-                <p class="article_card_paragraph">Growth slowed from 2.2% per year 50 years ago to 1.0% per year today...</p>
-                <div class="article_card_link">
-                    <div><h5 class="article_topic">North Korea</h5></div>
-                    <div><h5 class="article_link">Read the full article...</h5></div>                    
-                </div>
-            </div>
-        </div>
-        
-        <div class="article_card">
-            <div class="article_card_content">
-                <h4 class="article_card_title">The world population increased from 1 billion in 1800 to 7.9 billion today.</h4>
-                <div class="article_info">
-                    <p><strong>By</strong>: Matthew Teelucksingh</p>
-                    <p><strong>Published on</strong>: 25/04/2022</p>
-                </div>
-                <p class="article_card_paragraph">Growth slowed from 2.2% per year 50 years ago to 1.0% per year today...</p>
-                <div class="article_card_link">
-                    <div><h5 class="article_topic">North Korea</h5></div>
-                    <div><h5 class="article_link">Read the full article...</h5></div>                    
+        {% for article in articles %}
+            <div class="article_card">
+                <div class="article_card_content">
+                    <h4 class="article_card_title">{{article.title}}</h4>
+                    <div class="bottom-elements">
+                        <div class="article_info">
+                            <p><strong>By</strong>: {{article.author}}</p>
+                            <p><strong>Published on</strong>: {{article.created_at}}</p>
+                        </div>
+                        <div class="article_card_link">
+                            <div><h5 class="article_topic">{{article.category}}</h5></div>
+                            <div><h5 class="article_link"><a href="{% url 'full_article' slug=article.slug %}">Read the full article...</a></h5></div>                    
+                        </div>    
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="article_card">
-            <div class="article_card_content">
-                <h4 class="article_card_title">The world population increased from 1 billion in 1800 to 7.9 billion today.</h4>
-                <div class="article_info">
-                    <p><strong>By</strong>: Matthew Teelucksingh</p>
-                    <p><strong>Published on</strong>: 25/04/2022</p>
-                </div>
-                <p class="article_card_paragraph">Growth slowed from 2.2% per year 50 years ago to 1.0% per year today...</p>
-                <div class="article_card_link">
-                    <div><h5 class="article_topic">North Korea</h5></div>
-                    <div><h5 class="article_link">Read the full article...</h5></div>                    
-                </div>
-            </div>
-        </div>
-
-        <div class="article_card">
-            <div class="article_card_content">
-                <h4 class="article_card_title">The world population increased from 1 billion in 1800 to 7.9 billion today.</h4>
-                <div class="article_info">
-                    <p><strong>By</strong>: Matthew Teelucksingh</p>
-                    <p><strong>Published on</strong>: 25/04/2022</p>
-                </div>
-                <p class="article_card_paragraph">Growth slowed from 2.2% per year 50 years ago to 1.0% per year today...</p>
-                <div class="article_card_link">
-                    <div><h5 class="article_topic">North Korea</h5></div>
-                    <div><h5 class="article_link">Read the full article...</h5></div>                    
-                </div>
-            </div>
-        </div>
-
-        <div class="article_card">
-            <div class="article_card_content">
-                <h4 class="article_card_title">The world population increased from 1 billion in 1800 to 7.9 billion today.</h4>
-                <div class="article_info">
-                    <p><strong>By</strong>: Matthew Teelucksingh</p>
-                    <p><strong>Published on</strong>: 25/04/2022</p>
-                </div>
-                <p class="article_card_paragraph">Growth slowed from 2.2% per year 50 years ago to 1.0% per year today...</p>
-                <div class="article_card_link">
-                    <div><h5 class="article_topic">North Korea</h5></div>
-                    <div><h5 class="article_link">Read the full article...</h5></div>                    
-                </div>
-            </div>
-        </div>
-        
+        {% endfor %}        
     </div>
 </div>
 {% endblock body %}

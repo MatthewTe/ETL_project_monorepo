@@ -58,4 +58,8 @@
     padding-left: .9375rem;
     float: none;
     clear: both;
+    text-align: left;
+}
+.main_html_content p{
+    font-size: 1.3rem;
 }
