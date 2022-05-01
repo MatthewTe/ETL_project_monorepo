@@ -8,7 +8,7 @@
 }
 /* Styling for the main Masthead: */
 .homepage_masthead{
-    background: url("/static/application_frontend/imgs/masthead_background.jpg") 50% 0;
+    background: url("{% static 'application_frontend/imgs/masthead_background.jpg' %}") 50% 0;
     background-size: cover;
     padding-bottom: 3rem;
     padding-top: 3rem;
