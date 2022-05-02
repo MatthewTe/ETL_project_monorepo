@@ -7,13 +7,7 @@
   color: #1d3d63;
 }
 /* Styling for the main Masthead: */
-.homepage_masthead{
-    background: url("{% static 'application_frontend/imgs/masthead_background.jpg' %}") 50% 0;
-    background-size: cover;
-    padding-bottom: 3rem;
-    padding-top: 3rem;
-  }
-  .homepage_masthead h1 {
+.homepage_masthead h1 {
     font-size: 1.875rem;
     font-weight: 700;
     line-height: 1.4;
