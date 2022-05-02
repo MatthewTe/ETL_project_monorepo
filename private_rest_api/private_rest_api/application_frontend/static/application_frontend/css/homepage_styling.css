@@ -7,19 +7,36 @@
   color: #1d3d63;
 }
 /* Styling for the main Masthead: */
-.homepage_masthead h1 {
+.homepage_masthead{
+    padding-bottom: 2rem;
+    position: relative;
+  }
+  .homepage_masthead img{
+    object-fit: cover;
+    width: 100%;
+    max-height: 25rem;
+  }
+  .homepage_front_content{
+    background-color: rgba(255, 255, 255, 0.685);
+    border-radius: 5px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .homepage_masthead h1 {
     font-size: 1.875rem;
     font-weight: 700;
     line-height: 1.4;
     margin: 0 auto 1.5rem;
     max-width: 39.5rem; 
     text-align: center;
-    color:   #FE828C;
+    color:   #ff6572;
     word-wrap: break-word;
     padding-top: 1.5rem;
   }
   .homepage_masthead p {
-    color: #bccadb;
+    color: #000000;
     font-size: 1.125rem;
     font-weight: 700;
     max-width: 39.5rem; 
