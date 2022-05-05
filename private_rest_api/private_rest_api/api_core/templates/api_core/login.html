@@ -1,0 +1,22 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block css_styles %}
+<link rel="stylesheet" href="{% static 'api_core/css/login_styling.css' %}">
+{% endblock css_styles %}
+
+{% block body %}
+<div class="login_main">
+    <h2>Log In</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Log In</button>
+    </form> 
+    
+    <div class="create_link"><a href="">Create an account</a></div>
+</div>
+{% endblock body %}
+
+{% block footer %}
+{% endblock footer %}

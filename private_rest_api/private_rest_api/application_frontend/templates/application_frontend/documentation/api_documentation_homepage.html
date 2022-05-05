@@ -1,6 +1,39 @@
 {% extends 'application_frontend/frontend_core_layout.html' %}
 {% load static %}
 
+{% block css_styles %}
+    <link rel="stylesheet" href="{% static 'application_frontend/css/api_documentation.css' %}">
+{% endblock css_styles %}
+
 {% block body %}
-<h1>Page for API Documentation Coming Soon</h1>
+<div class="documentation_main">
+    <div class="documentation_sidebar">
+        <nav class="sidebar_nav">
+            <ul class="sidebar_list">
+                <li class="sidebar_list_object"><a href="#top"><h4>API Docs</h4></a></li>
+                <li class="sidebar_list_object"><a href="#getting_started"><h4>Getting Started</h4></a></li>
+                <li class="sidebar_list_object"><a href="#api_desc"><h4>API Descriptions</h4></a></li>
+
+            </ul>    
+        </nav>        
+    </div>
+    <div class="documentation_content">
+        <div class="documentation_section">
+            <h1 id="top">API Documentation</h1>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+        </div>
+
+        <div class="documentation_section">
+            <h1 id="getting_started">Getting Started</h1>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+        </div>
+        
+        <div class="documentation_section">
+            <h1 id="api_desc">APIs Available</h1>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+        </div>
+    </div>
+</div>
 {% endblock body %}

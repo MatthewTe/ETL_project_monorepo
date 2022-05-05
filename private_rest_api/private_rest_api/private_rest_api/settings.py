@@ -4,7 +4,6 @@ import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROD_STATUS = os.environ.get("PRODUCTION", False)
-
 # Using the production status of the server to set the DEBUG value (doing it this way because of a qwerk of the django-celery module).
 if PROD_STATUS:
     DEBUG=False
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "tinymce",
+    "crispy_forms",
 
     # Frontend Application:
     "application_frontend",
@@ -252,3 +252,10 @@ TINYMCE_COMPRESSOR = False
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "api_core.CustomUser"
+
+# Login route configs:
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Crispy Forms Configurations:
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

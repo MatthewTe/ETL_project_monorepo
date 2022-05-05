@@ -1,5 +1,6 @@
 # Importing native django methods:
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,6 +30,10 @@ schema_view = get_schema_view(
 urlpatterns = [
     # Frontend urls:
     path("", include("application_frontend.urls")),
+    
+    # Login/Logout urls:
+    path("login/", auth_views.LoginView.as_view(template_name="api_core/login.html"), name="main_login"),
+    path("logout/", auth_views.LogoutView.as_view(template_name="api_core/logout.html"), name="main_logout"),
 
     # Admin:
     path('admin/', admin.site.urls),
@@ -59,3 +64,6 @@ urlpatterns = [
 # Adding development url for uploading and accessing images:
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Defining a custom 404 page error handeling function:
+handler404 = "private_rest_api.views.page_not_found_view"
