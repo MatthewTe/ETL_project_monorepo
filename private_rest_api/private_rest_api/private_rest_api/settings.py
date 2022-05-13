@@ -139,6 +139,14 @@ else:
 # Celery Settings:
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+# Don't use pickle as serializer, json is much safer
+CELERY_TASK_SERIALIZER = "json"  
+CELERY_ACCEPT_CONTENT = ['application/json']
+
+CELERY_ENABLE_UTC = True  
+CELERY_TIMEZONE = "UTC"
+
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -10,30 +10,49 @@
     <div class="documentation_sidebar">
         <nav class="sidebar_nav">
             <ul class="sidebar_list">
+                {% block docs_sidebar %}
                 <li class="sidebar_list_object"><a href="#top"><h4>API Docs</h4></a></li>
                 <li class="sidebar_list_object"><a href="#getting_started"><h4>Getting Started</h4></a></li>
                 <li class="sidebar_list_object"><a href="#api_desc"><h4>API Descriptions</h4></a></li>
-
+                <li class="sidebar_list_object"><a href="#dev_docs"><h4>Developer Documentation</h4></a></li>
+                {% endblock docs_sidebar %}
             </ul>    
         </nav>        
     </div>
     <div class="documentation_content">
+
+        {% block doc_content %}
         <div class="documentation_section">
             <h1 id="top">API Documentation</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+            <div>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+            </div>
         </div>
 
         <div class="documentation_section">
             <h1 id="getting_started">Getting Started</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+            <div>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+            </div>
         </div>
         
         <div class="documentation_section">
             <h1 id="api_desc">APIs Available</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+            <div>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+            </div>
         </div>
+
+        <div class="documentation_section">
+            <h1 id="dev_docs">Documentation for Developers</h1>
+            <div>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+            </div>
+        </div>
+        {% endblock doc_content %}
     </div>
 </div>
 {% endblock body %}

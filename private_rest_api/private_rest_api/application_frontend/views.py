@@ -158,6 +158,9 @@ def render_documentation_homepage(request):
     """View that renders the homepage for the API Documentation"""
     return render(request, "application_frontend/documentation/api_documentation_homepage.html", context={})
 
+def render_developer_documentation(request):
+    return render(request, "application_frontend/documentation/developer_documentation.html", context={})
+
 def render_about_page(request):
     """View that renders the about page"""
     return render(request, "application_frontend/documentation/about_page.html", context={})
