@@ -7,7 +7,7 @@ import os
 from celery import Celery
 
 # Django Settings modules:
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "private_rest_api.settings")
+#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "private_rest_api.settings")
 
 # Creating and Configuring Celery app:
 app = Celery("private_rest_api")

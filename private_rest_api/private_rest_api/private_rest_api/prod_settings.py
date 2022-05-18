@@ -3,8 +3,10 @@ import os
 import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-PROD_STATUS = os.environ.get("PRODUCTION", False)
-# Using the production status of the server to set the DEBUG value (doing it this way because of a qwerk of the django-celery module).
+PROD_STATUS = os.environ["PRODUCTION"]
+
+# Using the production status of the server to set the DEBUG value 
+# (doing it this way because of a qwerk of the django-celery module).
 if PROD_STATUS:
     DEBUG=False
 else:
@@ -12,17 +14,11 @@ else:
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if DEBUG:
-    SECRET_KEY = '=ku2)(%oeuqzgy=pc3jw8gj+))0t_cpu-9pmjy2hl+$6^jq5t_'
-else:
-    SECRET_KEY = os.environ['SECRET_KEY']
-
+# SECURITY:
+SECRET_KEY = os.environ['SECRET_KEY']
 # Configuring the Settings Params based on the Debug status to seperate between production and development:
 
-if DEBUG:
-    ALLOWED_HOSTS = ["*"]
-else:
-    ALLOWED_HOSTS = ["rest-api", "localhost", os.environ.get("ALLOWED_HOST", "")] # Update on new deploy
+ALLOWED_HOSTS = ["rest-api", os.environ.get("ALLOWED_HOST", "")] # Update on new deploy
 
 # Application definition
 INSTALLED_APPS = [
@@ -87,62 +83,36 @@ TEMPLATES = [
 WSGI_APPLICATION = 'private_rest_api.wsgi.application'
 
 # REST FRAMEWORK Configuration:
-if DEBUG:
-    REST_FRAMEWORK = {
-        # Authentication/Permission:
-        'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
-
-        "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
-
-        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    }
-else:
-    REST_FRAMEWORK = {     
-        
-        'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
-        'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
-   
-        "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
-
-        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    }
+REST_FRAMEWORK = {        
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+}
 
 # Database
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ["POSTGRES_DB"],
+        'USER': os.environ["POSTGRES_USER"],
+        'PASSWORD': os.environ["POSTGRES_PASSWORD"],
+        'HOST': os.environ["POSTGRES_HOST"],
+        'PORT': os.environ["POSTGRES_PORT"]
         }
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ["POSTGRES_DB"],
-            'USER': os.environ["POSTGRES_USER"],
-            'PASSWORD': os.environ["POSTGRES_PASSWORD"],
-            'HOST': "rest-api-psql",
-            'PORT': os.environ["POSTGRES_PORT"]
-        }
-    }
-
-if DEBUG:
-    pass
-else:
-    # Configuring the Celery Broker:
-    CELERY_BROKER_URL = 'redis://redis:6379/0'
 
 # Celery Settings:
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULE_FILENAME = "celerybeat-schedule"
 
 # Don't use pickle as serializer, json is much safer
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 CELERY_TASK_SERIALIZER = "json"  
 CELERY_ACCEPT_CONTENT = ['application/json']
-
+CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ENABLE_UTC = True  
 CELERY_TIMEZONE = "UTC"
 
@@ -165,38 +135,33 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Logging & Error Catching Configuration:
 # Console Logging:
-if DEBUG:
-    pass
-else:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-            },
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
         },
-        'loggers': {
-            'django': {
-                'handlers': ['console'],
-                'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-            },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
         },
-    }
+    },
+}
 
 # Sentry Error Catching Configuration:
-if DEBUG==False:
-    # Importing SDK:
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
+# Importing SDK:
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
-    sentry_sdk.init(
-        dsn="https://fe8a2428b4984abd83604d5c26a9c051@o1148429.ingest.sentry.io/6219915",
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
-        send_default_pii=True
-    )
-
+sentry_sdk.init(
+    dsn=os.environ["SENTRY_PUBLIC_KEY"],
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+)
 
 # Configuration for Swagger UI:
 SWAGGER_SETTINGS = {
@@ -220,30 +185,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-if DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATIC_URL = '/static/'
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATIC_URL = '/static/'
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Media Files:
-if DEBUG:
-    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
-    MEDIA_URL = '/media/'
-else:
-    # Media Urls for File Uploads:
-    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
-    MEDIA_URL = '/media/'
+# Media Urls for File Uploads:
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
 
 # Importing Digital Ocean static file management files:
-if DEBUG:
-    pass
-else:
-    from .cdn.conf import (
+from .cdn.conf import (
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
     AWS_STORAGE_BUCKET_NAME,

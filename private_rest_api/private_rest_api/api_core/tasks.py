@@ -11,7 +11,8 @@ from data_APIs.twitter_api.models import TrendingTwitterTopic
 from django.core.mail import send_mail
 
 
-def send_status_update_email():
-    """The celery task 
-    """
-    pass
+@shared_task
+def test_process_1():
+    x = "Test Process Active"
+    print(x)
+    return x

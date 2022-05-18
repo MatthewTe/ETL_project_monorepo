@@ -238,7 +238,7 @@ ENTRYPOINT ["sh", "start_server.sh"]
       - rest_api_network
             </code>
         </pre>
-        <p>Also like the worker container the beat daemon is launched via an <code>.sh</code> script that is copied into the container. Currently this script only runs the generic <code>celery -A private_rest_api beat -l INFO</code> command as all configuration of the beat scheduler is done inside the django <code>settings.py</code> file.</p>
+        <p>Also like the worker container the beat daemon is launched via an <code>.sh</code> script that is copied into the container. Currently this script only runs the generic <code>celery -A private_rest_api beat -l INFO  --schedule=django_celery_beat.schedulers:DatabaseScheduler</code> command as all configuration of the beat scheduler is done inside the django <code>settings.py</code> file.</p>
     
         <h3>Celery Flower Monitor</h3>
         <p>The third upstream process for celery is a flower instance - a tool that monitors the celery pool and keeps track of all workers and tasks they carry out. The same container - <code>.sh</code> script arrangement is again used (the Dockerfile is built from the <code>mher/flower</code> image and the environment variables used to configure the flower instance are as follows:</p>

@@ -1,0 +1,60 @@
+##############################################################
+# The docker-compose file for standing up the mono-repo 
+# of the data ingestion project in its development environment.
+
+# This runs the project using publicly available environment 
+# variables, assumes that it will not be scaled and is designed
+# to run on a single machine.
+
+# DO NOT USE THIS IN PRODUCTION!!!
+##############################################################
+---
+version: '3.9'
+services:
+
+  # The Nginx Server for Routing Traffic:
+  nginx-reverse-proxy:
+    ports:
+      - "80:80"
+      - "81:81"
+  
+  # Django Server:
+  private-rest-api:
+    command: ["./start_server.sh"]
+    env_file:
+      dev.env
+
+  # Celery Worker:
+  celery-worker:
+    command: ["./run_celery_worker.sh"]
+    env_file: 
+      dev.env
+
+  # Celery Beat Scheduler:
+  celery-beat-scheduler:
+    volumes: 
+      - .:/app
+    env_file:
+      dev.env
+    command: ["./run_celery_beat.sh"]
+
+
+  # Celery Monitor Flower:       
+  celery-flower-monitor:
+    command: ["./run_celery_flower.sh"]
+    env_file: 
+      dev.env
+
+  # Redis Database for Celery:
+  celery-redis:
+    command: ["./run_redis.sh"]
+    env_file: 
+      dev.env
+
+  # PostgreSQL Database for the rest api:
+  rest-api-psql:
+    volumes: 
+      - rest-api-psql-volume:/var/lib/postgresql/data
+    env_file: 
+      dev.env
+
