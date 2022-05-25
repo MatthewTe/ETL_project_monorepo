@@ -1,0 +1,33 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block css_styles %}
+    <link rel="stylesheet" href="{% static 'application_frontend/css/sipri_styling.css' %}">
+{% endblock css_styles %}
+
+{% block body %}
+<div class="SIPRI_dashboard">
+
+    <div class="into_description">
+        <h1>The Stockholm International Peace Research Institute</h1>
+        <p>The Stockholm international Peace Research Institute or SIPRI is an international think-tank that researches arms control/dissemination  and international conflict and peace studies. It conducts research, writes reports and provides recommendations to policymakers about these topics.</p>
+        <p>It is exceedingly difficult if not impossible to research peace and conflict studies or foreign policy without independently running across SIPRI analysis or at the very least SIPRI data. As described above they produce numerous reports, articles, events and other publications that will no doubt be referenced in Paribus articles going forward.</p>
+        <p>Of particular interest for the dashboard section are the various Databases that SIPRI maintains relating to the status of the global arms trade, military operations and multilateral evens such as arms embargoes and exports. We thought it would be helpful to provide some visualizations for these databases and as such have created a dashboard displaying the relevant information from various SIPRI databases:</p>    
+    </div>
+
+    <div class="arms_industry_dashboard">
+        <h2>SIPRI Arms Industry Dashboard</h2>
+        <p>The first dashboard displays data from SIPRI’s Arms Industry database, which broadly tracks economic trends in the global arms industry from the period of 2002-2020 or, as more accurately described by <a href="https://www.sipri.org/databases/armsindustry">them</a>:</p>
+        <p><i>“The SIPRI Arms Industry Database contains information on arms-producing and military services companies (‘arms companies’). It includes public and private companies but excludes manufacturing or maintenance units of the armed services. The database contains financial data for arms companies based on open sources. Sources include company annual reports and articles in journals and newspapers. Estimates of arms sales are made on the basis of open information. The data for all years is revised annually based on new information.”</i></p>
+
+        <h3>Total Global Arms Sales from 2002-2020</h3>
+        <p>This represents the sum of all arms sales performed by the top 100 arms-producing and military service companies globally from the period of 2002 to 2020. The full dataset from the SIPRI database can be accesses <a href="https://www.sipri.org/databases/armsindustry">here</a>.</p>
+        <div>{{ total_arms_sales_fig|safe }}</div>
+
+        <h3>Top 100 Arms Producing Company Data from 2002-2020</h3>
+        <p>This dashboard displays timeseries data about a specific arms company such as its rank in the top 100 arms manufacturers or the percent of its sales that are made up of arms sales. This data describes how global arms manufacturing has evolved since the early 2000s and how different regions/countries have developed arms manufacturing capabilities. Again the full dataset from SIPRI can be accessed <a href="https://www.sipri.org/databases/armsindustry">here</a>:</p>
+
+    </div>
+
+</div>
+{% endblock body %}

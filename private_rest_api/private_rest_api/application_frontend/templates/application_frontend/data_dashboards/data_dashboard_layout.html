@@ -1,6 +1,30 @@
 {% extends 'application_frontend/frontend_core_layout.html' %}
 {% load static %}
 
+{% block css_styles %}
+    <link rel="stylesheet" href="{% static 'application_frontend/css/data_dashboard_styling.css' %}">
+{% endblock css_styles %}
+
 {% block body %}
-<h1>Data Dashboards Coming Soon</h1>
+
+<div class="dashboard_grid">
+
+    <div class="data_dashboard_card">
+        <a href="{% url 'sipri_dashboard' %}" class="main_dashboard_link">
+            <div class="card_img">
+                <img src="{% static 'application_frontend/imgs/masthead_w_sipri.jpg' %}" alt="">
+            </div>
+
+            <div class="dashboard_content">
+                <h4 class="dashboard_title">SIPRI Data Dashboards</h4>
+                <p>A Dashboard that visualizes global arms and conflict data collected by the Stockholm International Peace Research Institute from their databases.</p>                
+
+            </div>
+        </a>
+    </div> 
+
+
+    
+</div>
+
 {% endblock body %}

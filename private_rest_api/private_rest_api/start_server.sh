@@ -6,7 +6,6 @@ printf "
 \nThe production status is: %s \nThe django settings file being used is: %s
 \n\n" $PRODUCTION $DJANGO_SETTINGS_MODULE
 
-# Collecting static files:
 if [ "$PRODUCTION" = True ]; then
 
     printf "\nRunning the Django Web Server in the Production Environment:\n"
@@ -14,7 +13,7 @@ if [ "$PRODUCTION" = True ]; then
     python manage.py collectstatic --noinput
 else
 
-    printf "\Running the Django Web Server in the Development Environment:"
+    printf "\nRunning the Django Web Server in the Development Environment:"
 fi
 
 # Applying Database Migrations:

@@ -90,9 +90,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
+
 # Database
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -111,11 +111,13 @@ DATABASES = {
         'PORT': os.environ["POSTGRES_PORT"]
     }
 }
+"""
 
 # Celery Settings:
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE_FILENAME = "celerybeat-schedule"
 
+"""
 # Don't use pickle as serializer, json is much safer
 CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
 CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
@@ -124,7 +126,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ENABLE_UTC = True  
 CELERY_TIMEZONE = "UTC"
-
+"""
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -181,7 +183,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Media Files:
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Frontend styling for TinyMCE:

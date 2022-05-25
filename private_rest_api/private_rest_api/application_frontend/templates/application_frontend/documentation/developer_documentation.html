@@ -12,11 +12,7 @@
 
 {% block doc_content %}
 <div class="documentation_section">
-    <h1 id="top">Documentation for Developers</h1>
-    <div>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
-    </div>
-    
+    <h1 id="top">Documentation for Developers</h1>    
 </div>
 
 <div class="documentation_section">
@@ -26,135 +22,121 @@
     
         <pre>
             <code>
+version: '3.9'
 services:
-  # PSQL Database:
-  db:
-    image: postgres:9.4
-    container_name: db
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+
+  # The Nginx Server for Routing Traffic:
+  nginx-reverse-proxy:
+    build: ./nginx
     networks: 
       - rest_api_network
-
-  # Redis Message Broker:
-  redis:
-    image: redis:2.8.19
-    container_name: redis
-    networks: 
-      - rest_api_network
-    command: redis-server 
-
-  # Building the Django server:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: web
-    command: ["./run_web.sh"]
     depends_on:
-      - db
-    volumes:
-      - .:/app # This should be mounted in the current directory. 
+      - private-rest-api
+      - celery-flower-monitor
+    container_name: nginx-reverse-proxy
+    restart: always
+
+  # Django REST API:
+  private-rest-api:
+    build:
+      context: private_rest_api/.
+      dockerfile: Dockerfile
+    depends_on: 
+      - celery-redis
+      - rest-api-psql
+    container_name: ETL-rest-api
     networks: 
       - rest_api_network
   
-  # Nginx server:
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    container_name: nginx
-    networks:
-      - rest_api_network
-    ports: 
-      - "80:80"
-      - "81:81"
-    depends_on:
-      - web
-      - worker
-      - beat
-      - flower
-    restart: always
-
   # Celery Worker:
-  worker:
+  celery-worker:
     build:
-      context: .
+      context: private_rest_api/.
       dockerfile: Dockerfile
-    container_name: celery_worker
-    depends_on:
-      - web
-      - db
-      - redis
-    command: ["./run_celery_worker.sh"]
-    volumes:
-      - .:/app
-    environment: 
-      MAX_AUTOSCALE: 10
-      MIN_AUTOSCALE: 4
-    networks: 
+    depends_on: 
+      - private-rest-api
+      - celery-redis
+    container_name: ELT-celery-worker
+    networks:
       - rest_api_network
   
   # Celery Beat Scheduler:
-  beat:
+  celery-beat-scheduler:
     build:
-      context: .
+      context: private_rest_api/.
       dockerfile: Dockerfile
-    container_name: celery_beat
-    depends_on:
-      - web
-      - db
-      - redis
-    command: ["./run_celery_beat.sh"]
-    volumes:
+    depends_on: 
+      - private-rest-api
+      - celery-redis
+      - celery-worker
+    container_name: ETL-celery-beat-scheduler
+    volumes: 
       - .:/app
-    networks:
+    networks: 
+      - rest_api_network
+  
+  # Celery Monitor Flower:       
+  celery-flower-monitor:
+    build: 
+      context: private_rest_api/celery_flower/.
+      dockerfile: Dockerfile
+    depends_on: 
+      - celery-beat-scheduler
+      - celery-worker
+      - celery-redis
+    container_name: ETL-celery-monitor-flower
+    networks: 
+      - rest_api_network
+    
+  # Redis Database for Celery:
+  celery-redis:
+    build:
+      context: private_rest_api/celery_redis/.
+      dockerfile: Dockerfile
+    container_name: celery-redis
+    networks: 
       - rest_api_network
 
-  # Flower Display:
-  flower:
-    build: 
-      context: ./flower
-      dockerfile: Dockerfile
-    container_name: celery_flower
-    command: ["./run_celery_flower.sh"]
-    depends_on:
-      - beat
-      - worker
-      - redis  
-    environment:
-      CELERY_BROKER_URL: redis://redis:6379
-      CELERY_RESULT_BACKEND: redis://redis:6379
-      FLOWER_OAUTH2_KEY: example_security_key
-      FLOWER_OAUTH2_SECRET: example_oauth_secret
-      FLOWER_OAUTH2_REDIRECT_URI: http://localhost:81/login
-    networks:
+  # PostgreSQL Database for the rest api:
+  rest-api-psql:
+    image: postgres
+    container_name: rest-api-psql
+    restart: always
+    networks: 
       - rest_api_network
+
+volumes:
+  rest-api-psql-volume:
 
 networks:
-  rest_api_network:
-            </code>
+  rest_api_network:            
+</code>
         </pre>
         
+        <p>The core of the project is contained in the docker-compose.yml file which contains the rough outline of the services used. In production the core docker components are overwritten using the <code>-f docker-compose.prod.yml</code> file. In development a different configuration is used to build the project on a local machine via <code>-f docker-compose.dev.yml</code>. The separate docker-compose files for production and development can be viewed in the <a href="https://github.com/MatthewTe/ETL_project_monorepo">repository</a>. Currently the main difference between the development and production environments are the environment variables used to configure the services. The development environment builds the service using generic environment variables from the publicly available <code>dev.env</code> file. In contrast the production environment requires you to create your own <code>prod.env</code> file using the public env file as a guide.  For example if you were deploying the project for development you would use the development configuration via:</p>
+        <p><code>docker-compose -f docker-compose.ym -f docker-compose.dev.yml up</code></p>
+        <p>And if you wanted to deploy it in a production/staging environment you would run:</p>
+        <p><code>docker-compose -f docker-compose.ym -f docker-compose.prod.yml up</code></p>        
         <p>Typically components in the mono-repo are contained in a sub-directory that contains three main objects:</p>
         <ul>
             <li>The source code of the component (for example the actual django codebase or nginx server configuration)</li>
             <li>A Dockerfile that describes the image</li>
-            <li>A bash script file that the docker-compose file executes after the container is built (It is important to note that because the .sh script needs to be execute inside the container a key function of the Dockerfile is to copy the .sh script into the built container image).</li>
+            <li>A bash script file that the docker-compose file executes after the container is built.</li>
         </ul>
         
         <p>An example of a components <code>Dockerfile</code> is:</p>   
         <pre>
             <code>
-#########################################################
+#############################################################
 # The Dockerfile for building and initalizing the REST API
-#########################################################
+#############################################################
 FROM python:3.8
 
 # Creating non-root user to run in container:
-RUN groupadd -g 999 django_user && useradd -r -u 999 -g django_user django_user
+RUN groupadd -g 999 django_user \
+ && useradd -r -u 999 -g django_user django_user
+
+# Adding Permissions to the Django User:
 
 # The enviroment variable ensures that the python output is set straight
 # to the terminal with out buffering it first
@@ -162,15 +144,15 @@ ENV PYTHONUNBUFFERED 1
 
 # Copying the django site files into the container: 
 COPY private_rest_api /private_rest_api
+RUN chown -R django_user:django_user private_rest_api
+
 WORKDIR /private_rest_api
 
 # Installing python packages:
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-#USER django_user
 
-# Configuring and starting the Django Project via a bash script: 
-ENTRYPOINT ["sh", "start_server.sh"]
-            </code>
+USER django_user
+</code>
         </pre>
 
         <p>The docker-compose file starts all the necessary containers and connects them via an internal network currently called (for legacy reasons) the <code>rest_api_network</code>. The nginx proxy server (see below) is the only service externally exposed. All other connection/interaction between containers is done from within the network.</p>
@@ -187,32 +169,19 @@ ENTRYPOINT ["sh", "start_server.sh"]
         <p>The data ingestion in the project is done via scheduled processes that extract, transform and ingest external data on a predefined schedule. More documentation on how data ingestion functions operate with the API are available, but in this context it is sufficient to say that the django web server requires that processes be executed at desired intervals. The most natural way to accomplish this is through the use of the Celery task queue.</p>    
         
         <h3>Celery Workers</h3>
-        <p>The celery worker that executes the tasks is run insides its own docker container built from the django web server Dockerfile.</p>
+        <p>The celery worker that executes the tasks is run insides its own docker container built from the django web server Dockerfile. All examples are from the development docker-compose file and overwrite/add elements to the main compose file:</p>
         
         <pre>
             <code>
   # Celery Worker:
-  worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: celery_worker
-    depends_on:
-      - web
-      - db
-      - redis
+  celery-worker:
     command: ["./run_celery_worker.sh"]
-    volumes:
-      - .:/app
-    environment: 
-      MAX_AUTOSCALE: 10
-      MIN_AUTOSCALE: 4
-    networks: 
-      - rest_api_network                
+    env_file: 
+      dev.env
             </code>
         </pre>
 
-        <p>Like the django server the workers are launched via a <code>.sh</code> script that is copied into the docker container and starts the worker daemon via the typical command <code>celery -A private_rest_api worker</code>. The worker is configured using environmental variables declared in the docker-compose file at runtime. Currently the only configuration allowed is to set the minimum and maximum number of workers in the pool via the two env variables:</p>
+        <p>Like the django server the workers are launched via a <code>.sh</code> script that starts the worker daemon via the typical command <code>celery -A private_rest_api worker</code>. The worker is configured using environment variables stored in the relevant <code>.env</code> file. Currently the only configuration allowed is to set the minimum and maximum number of workers in the pool via the two env variables:</p>
         <p><code>MAX_AUTOSCALE: 10</code></p>
         <p><code>MIN_AUTOSCALE: 4</code></p>
         <p>Aside from auto-scaling, specifying external destinations for the log and pid (<code>--logifle</code> , <code>--pidfile</code>,  <code>-—statedb</code>) files generated by the worker process is the next step though at the time of writing this has not been done.</p>
@@ -222,21 +191,13 @@ ENTRYPOINT ["sh", "start_server.sh"]
         <pre>
             <code>
   # Celery Beat Scheduler:
-  beat:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: celery_beat
-    depends_on:
-      - web
-      - db
-      - redis
-    command: ["./run_celery_beat.sh"]
-    volumes:
+  celery-beat-scheduler:
+    volumes: 
       - .:/app
-    networks:
-      - rest_api_network
-            </code>
+    env_file:
+      dev.env
+    command: ["./run_celery_beat.sh"]
+</code>
         </pre>
         <p>Also like the worker container the beat daemon is launched via an <code>.sh</code> script that is copied into the container. Currently this script only runs the generic <code>celery -A private_rest_api beat -l INFO  --schedule=django_celery_beat.schedulers:DatabaseScheduler</code> command as all configuration of the beat scheduler is done inside the django <code>settings.py</code> file.</p>
     
@@ -247,54 +208,51 @@ ENTRYPOINT ["sh", "start_server.sh"]
         <p><code>FLOWER_OAUTH2_KEY</code></p>
         <p><code>FLOWER_OAUTH2_SECRET</code></p>
         <p><code>FLOWER_OAUTH2_REDIRECT_URI</code></p>
+        <p><code>FLOWER_AUTH_SCHEME</code></p>
+        <p><code>FLOWER_GIT_EMAIL</code></p>
 
-        <p>The first two variables deal with pointing to the message broker/database used by all workers and are fairly self explanatory. The other env variables have to do with setting up an authentication system for the flower dashboard.</p>
+        <p>The first two variables deal with pointing to the message broker/database used by all workers and are fairly self explanatory. The other env variables have to do with setting up an authentication system for the flower dashboard, which is not enabled in the development environment.</p>
     
         <pre>
             <code>
-  flower:
-    build: 
-      context: ./flower
-      dockerfile: Dockerfile
-    container_name: celery_flower
+  # Celery Monitor Flower:       
+  celery-flower-monitor:
     command: ["./run_celery_flower.sh"]
-    depends_on:
-      - beat
-      - worker
-      - redis  
-    environment:
-      CELERY_BROKER_URL: redis://redis:6379
-      CELERY_RESULT_BACKEND: redis://redis:6379
-      FLOWER_OAUTH2_KEY: example_security_key
-      FLOWER_OAUTH2_SECRET: example_oauth_secret
-      FLOWER_OAUTH2_REDIRECT_URI: http://localhost:81/login
-    networks:
-      - rest_api_network
+    env_file: 
+      dev.env
             </code>
         </pre>
         
-        <p>Flower uses Githubs OAuth system for authenticating users and that system is configured according to the (very limited) docs. Basically all the auth tokens and ids are defined by the env variables and the celery flower command in the <code>.sh</code> file is run with the <code>-auth_provider=flower.views.auth.GithubLoginHandler</code> and the <code>—auth=thegithubaccountemail@example.com</code> flags.</p>
+        <p>Flower uses Githubs OAuth system for authenticating users and that system is configured according to the (very limited) docs. Basically all the auth tokens and ids are defined by the env variables and the celery flower command in the <code>.sh</code> file is run with the <code>-auth_provider=flower.views.auth.GithubLoginHandler</code> and the <code>—auth=thegithubaccountemail@example.com</code> flags. If flower is run in the development environment no auth system is required (all <code>.sh</code> scripts contain conditional logic that checks for production status. See the script below).</p>
     
         <pre>
             <code>
 #!/bin/sh
-sleep 20
+sleep 12
 
-celery flower --auth_provider=flower.views.auth.GithubLoginHandler --auth=thegithubaccountemail@example.com
-            </code>
+# Running the flower daemon based on if the environment is development or production:
+if [ "$PRODUCTION" = True ]; then
+
+    echo "Running Flower in a Production environment"
+    # Running with the Github Auth system:
+    celery flower --auth_provider=$FLOWER_AUTH_SCHEME --auth=$FLOWER_GIT_EMAIL
+else
+
+    echo "Running Flower in a Development environment"
+    # Running without the auth system:
+    celery flower
+fi            </code>
         </pre>
     
         <h3>Message Broker and Backend</h3>
         <p>As we are currently not intending to scale the celery scheduled ingestion process we do not need a data persistent backend or the ability to handle a large amount of messages. As such we used redis as both our message broker and celery backend. Here our redis instance is configured in our docker-compose file:</p>
         <pre>
             <code>
-  # Redis Message Broker:
-  redis:
-    image: redis:2.8.19
-    container_name: redis
-    networks: 
-      - rest_api_network
-    command: redis-server 
+  # Redis Database for Celery:
+  celery-redis:
+    command: ["./run_redis.sh"]
+    env_file: 
+      dev.env
             </code>
         </pre>        
     </div>
@@ -303,16 +261,112 @@ celery flower --auth_provider=flower.views.auth.GithubLoginHandler --auth=thegit
 
 <div class="documentation_section">
     <h1 id="databases">Databases on the backend</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
-</div>
+    <p>The main persistent database that services use is PostgreSQL. It is built using the official postgres docker image and is configured using the standard environment variables:</p>    
+    <p><code>POSTGRES_USER</code></p>
+    <p><code>POSTGRES_PASSWORD</code></p>
+    <p><code>POSTGRES_DB</code></p>
+    <p><code>POSTGRES_PORT</code></p>
+    <p><code>POSTGRES_HOST</code></p>
+
+    <pre>
+      <code>
+  # PostgreSQL Database for the rest api:
+  rest-api-psql:
+    volumes: 
+      - rest-api-psql-volume:/var/lib/postgresql/data
+    env_file: 
+      dev.env
+      </code>
+    </pre>
+
+    <p>In production it is connected to an external docker volume to maintain persistence. When logging and backup services are added to the project they will be described here.</p>
+  
+  </div>
 
 <div class="documentation_section">
     <h1 id="nginx">Nginx as a reverse proxy</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+    <p>Nginx is used a the reverse-proxy server and gateway for external traffic entering the project. Currently it routes traffic to the django gunicorn server and the flower dashbaord. It is configured via the <code>default.conf</code> file below:</p>    
+
+    <pre>
+      <code>
+upstream rest-api {
+    server private-rest-api:80;
+}
+upstream flower {
+    server celery-flower-monitor:5555;
+}
+
+server {
+    listen 80;
+
+    location / {
+         proxy_pass http://rest-api;
+         proxy_set_header Host $host:$server_port;
+    }
+}   
+
+server {   
+    listen 81;
+
+    location / {
+        proxy_pass http://flower;
+    }
+
+}
+      </code>
+    </pre>
+
+    <p>Based on the basic config file above it routes external traffic from ports 80 and 81 to the django gunicorn and flower servers respectively. As such those are the ports in the internal docker network that are exposed:</p>
+    <pre>
+      <code>
+  # The Nginx Server for Routing Traffic:
+  nginx-reverse-proxy:
+    ports:
+      - "80:80"
+      - "81:81"
+      </code>
+    </pre>
+
 </div>
 
 <div class="documentation_section">
     <h1 id="gunicorn">Running the django web server (Gunicorn)</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem laudantium eligendi qui dolorum illum itaque consectetur labore maiores, quidem, saepe quos incidunt quam tempora doloribus aliquid architecto error minima fugiat</p>    
+    <p>The heart of the project, the django server is built using the docker-compose commands:</p>   
+
+    <pre>
+      <code>
+  # Django Server:
+  private-rest-api:
+    command: ["./start_server.sh"]
+    env_file:
+      dev.env
+      </code>
+    </pre>
+
+    <p>The environment variables that are necessary for the django server to run are indicated in the django <code>settings.py</code> files. There are also different settings files depending of if the server is run in a production or development environment. The settings file that the project uses is determined by the <code>DJANGO_SETTINGS_MODULE</code> environment variable (<code>private_rest_api.dev_settings</code>in development for example.)</p>
+    <p>Database migrations, static file collections and actually launching the Gunicorn server are done by the <code>start_server.sh</code> script that is executed on startup by docker-compose:</p>
+
+    <pre>
+      <code>
+if [ "$PRODUCTION" = True ]; then
+
+    printf "\nRunning the Django Web Server in the Production Environment:\n"
+    echo "Performing Static File Collection"
+    python manage.py collectstatic --noinput
+else
+
+    printf "\nRunning the Django Web Server in the Development Environment:"
+fi
+
+# Applying Database Migrations:
+echo "Making Database Migrations"
+python manage.py makemigrations
+python manage.py migrate 
+
+# Starting the celery schedueler processes:
+echo "Starting the gunicorn server"
+gunicorn private_rest_api.wsgi:application --bind 0.0.0.0:80
+      </code>
+    </pre>
 </div>
 {% endblock doc_content %}

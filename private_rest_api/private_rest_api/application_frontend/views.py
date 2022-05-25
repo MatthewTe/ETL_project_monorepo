@@ -1,6 +1,9 @@
 # Importing native django packages:
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.templatetags.static import static
+from django.conf import settings
 
 # Importing view logic:
 from .article_logic import get_article_categories, get_article_summary, get_full_article
@@ -8,6 +11,19 @@ from .article_logic import get_article_categories, get_article_summary, get_full
 # Importing Article forms & models:
 from data_APIs.articles_api.forms import ArticleForm
 from data_APIs.articles_api.models import Article 
+
+# Importing Frontend asset models:
+from application_frontend.models import SIPRIData
+
+# Importing data manipulation packages: 
+from openpyxl import load_workbook
+import pandas as pd
+import os
+
+# Importing visualization packages:
+import plotly.graph_objects as go
+import plotly.express as px
+
 
 # Method that checks if user is a staff member: 
 def is_not_staff(user):
@@ -146,6 +162,51 @@ def create_article(request, id=None):
 def render_dashboard_homepage(request):
     """View that renders the homepage for data dashboards"""
     return render(request, "application_frontend/data_dashboards/data_dashboard_layout.html", context={})
+
+def render_sipri_dashboard(request):
+    """View that renders the homepage for the SIPRI Data Dashboards"""
+
+    # Context to be created:
+    context={}
+
+    # Querying the model object that contains urls to datasets:
+    datasets = SIPRIData.objects.first()
+    
+    # Loading the workbook data:
+    total_arms_sale_sheet = load_workbook("application_frontend/static/application_frontend/data/Total-arms-sales-SIPRI-Top-100-2002-2020.xlsx")["Sheet1"]
+    
+    # Converting worksheet to pandas dataframe:
+    data_obj = total_arms_sale_sheet["A4:T4"][0]
+    date_index = [data.value for data in data_obj][1:]
+
+    # Extracting relevant sales data as a dict:
+    total_sales_dict = {
+        "Spending Non-Adjusted": [data.value for data in total_arms_sale_sheet["B5:T5"][0]],
+        "Spending Adjusted": [data.value for data in total_arms_sale_sheet["B8:T8"][0]]
+    }
+    total_sales_df = pd.DataFrame(total_sales_dict, index=date_index)
+    pd.to_datetime(total_sales_df.index)
+
+    # Creating plotly graph object out of the dataframe:
+    total_sales_fig = px.line(
+        total_sales_df,
+        x=total_sales_df.index,
+        y=total_sales_df.columns
+    )
+    # Styling the figure and adding it to the context:
+    total_sales_fig.update_traces(mode="markers+lines", hovertemplate="$%{y} Billion")
+    total_sales_fig.update_layout(
+    title="Total Arms Sales from 2002-2020",
+    xaxis_title="Year",
+    yaxis_title="Billion ($USD)",
+    legend_title="Type of Spending",
+    hovermode="x unified"
+    )
+    context["total_arms_sales_fig"] = total_sales_fig.to_html()
+
+    # TODO: Add Dash application functionality for the Top 100 Arms Producing Company Data from 2002-2020 Dashboard.
+
+    return render(request, "application_frontend/data_dashboards/sipri_dashboard.html", context=context)
 
 # Korea Views:
 def render_north_korea_homepage(request):
