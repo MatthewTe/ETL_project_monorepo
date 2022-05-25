@@ -35,6 +35,7 @@ services:
       context: private_rest_api/.
       dockerfile: Dockerfile
     depends_on: 
+      - rest-api-psql
       - private-rest-api
       - celery-redis
     container_name: ELT-celery-worker
@@ -47,6 +48,7 @@ services:
       context: private_rest_api/.
       dockerfile: Dockerfile
     depends_on: 
+      - rest-api-psql
       - private-rest-api
       - celery-redis
       - celery-worker
