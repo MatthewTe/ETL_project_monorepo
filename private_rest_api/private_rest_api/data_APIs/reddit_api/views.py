@@ -5,10 +5,11 @@ from django.http import JsonResponse
 # DRF Imports:
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 # Importing Reddit Models, Serializers, Filters and Paginators:
 from .models import RedditPosts, RedditDeveloperAccount, Subreddit
@@ -63,6 +64,7 @@ def queryset_datetime_filter(queryset, start_date, end_date):
 schema_description="The endpoint that provides a list of all supported subreddits for the reddit posts endpoint."
 @swagger_auto_schema(method="get", operation_description=schema_description)
 @api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def subreddits(request):
     """The basic API endpoint that generates a list of subreddits when queried.
     """

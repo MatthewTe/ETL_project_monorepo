@@ -15,8 +15,8 @@
 
     <div class="reddit-dashboard">
         <h2>Reddit Data Dashboards</h2>
-        <p>A brief description of the reddit dashboards</p>
-        <div>This is where the Plotly Dashboard should be</div>
+        <p>The Reddit API provides serialized data collected from the list of <a href="{% url 'Subreddits' %}">supported subreddits</a>. You can query this data via the schema specifications provided by the <a href="{% url 'schema-swagger-ui' %}">Open API specification</a> (under the <code>/reddit/posts/</code> section of the dashboard to see the docs or to test the API). You can also use the Ceteris Paribus python API here to query the data or you can build your own if you want maximum customization.</p>
+        <div>{{ reddit_posts_timeseries|safe }}</div>
     </div>
 
 </div>

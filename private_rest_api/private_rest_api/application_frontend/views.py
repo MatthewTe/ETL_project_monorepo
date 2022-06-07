@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.templatetags.static import static
 from django.conf import settings
+from django.db.models.functions import TruncDay, TruncWeek, ExtractWeek, ExtractDay
+from django.db.models import Count, Sum
 
 # Importing view logic:
 from .article_logic import get_article_categories, get_article_summary, get_full_article
@@ -11,12 +13,15 @@ from .article_logic import get_article_categories, get_article_summary, get_full
 # Importing Article forms & models:
 from data_APIs.articles_api.forms import ArticleForm
 from data_APIs.articles_api.models import Article 
+from data_APIs.reddit_api.models import RedditPosts
 
 # Importing Frontend asset models:
 from application_frontend.models import SIPRIData
 
 # Importing data manipulation packages: 
 from openpyxl import load_workbook
+from datetime import date, timedelta
+import time
 import pandas as pd
 import os
 
@@ -229,4 +234,36 @@ def render_about_page(request):
 def render_api_dashboard(request):
     """"""
     context = {}
+
+    # Querying all reddit posts created in the last month:
+    prev_month = date.today() - timedelta(days=30)
+    #reddit_posts = RedditPosts.objects.filter(created_on__gt=prev_month)
+    reddit_posts = RedditPosts.objects.all()
+    reddit_posts = reddit_posts.values_list("created_on")
+
+    # Converting list of records to a dataframe to resample and create plotly graph:
+    reddit_dataframe = pd.DataFrame.from_records(reddit_posts, columns=["created_on"])
+    reddit_dataframe["_count"] = 1
+    reddit_dataframe.set_index(["created_on"], inplace=True)
+    reddit_posts_resample = reddit_dataframe["_count"].squeeze().resample("D").sum()
+
+    # Creating the plotly Timeseries graph for subreddit posts extracted per day: 
+    reddit_timeseries_fig = px.area(
+        reddit_posts_resample,
+        x=reddit_posts_resample.index,
+        y=reddit_posts_resample
+    )
+
+    reddit_timeseries_fig.update_traces(mode="lines", hovertemplate="%{y} Posts on %{x}")
+    reddit_timeseries_fig.update_layout(
+        title="Reddit Posts Saved to the Database in the last Month",
+        xaxis_title="Days",
+        yaxis_title="Reddit Posts",
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False),
+        plot_bgcolor="#0d1117"
+    )
+
+    context["reddit_posts_timeseries"] = reddit_timeseries_fig.to_html()
+
     return render(request, "application_frontend/documentation/api_dashboard.html", context=context)
