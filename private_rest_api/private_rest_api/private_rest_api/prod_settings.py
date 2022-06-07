@@ -106,6 +106,7 @@ DATABASES = {
 # Celery Settings:
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE_FILENAME = "celerybeat-schedule"
+CELERY_MAX_TASKS_PER_CHILD=1
 
 # Don't use pickle as serializer, json is much safer
 CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]

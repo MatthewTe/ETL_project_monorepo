@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django_filters",
     "tinymce",
     "crispy_forms",
+    "django_plotly_dash.apps.DjangoPlotlyDashConfig",
 
     # Frontend Application:
     "application_frontend",
@@ -199,3 +200,6 @@ LOGOUT_REDIRECT_URL = "/"
 
 # Crispy Forms Configurations:
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Django-Dash Settings:
+X_FRAME_OPTIONS = 'SAMEORIGIN'

@@ -225,3 +225,8 @@ def render_developer_documentation(request):
 def render_about_page(request):
     """View that renders the about page"""
     return render(request, "application_frontend/documentation/about_page.html", context={})
+
+def render_api_dashboard(request):
+    """"""
+    context = {}
+    return render(request, "application_frontend/documentation/api_dashboard.html", context=context)

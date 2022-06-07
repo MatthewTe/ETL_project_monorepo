@@ -5,7 +5,7 @@ sleep 7
 if [ "$PRODUCTION" = True ]; then 
 
     echo "Running the Celery Beat Scheduler in the Production environment"
-    #celery -A private_rest_api beat -l INFO --schedule=django_celery_beat.schedulers:DatabaseScheduler
+    celery -A private_rest_api beat -l INFO --schedule=django_celery_beat.schedulers:DatabaseScheduler
 else
 
     echo "Running the Celery Beat Scheduler in the Development environment"

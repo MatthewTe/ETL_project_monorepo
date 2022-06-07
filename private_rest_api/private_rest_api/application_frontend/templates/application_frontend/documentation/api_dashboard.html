@@ -1,0 +1,23 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block css_styles %}
+    <link rel="stylesheet" href="{% static 'application_frontend/css/api_dashboard_styling.css' %}">
+{% endblock css_styles %}
+
+{% block body %}
+<div class="api_dashboard_body">
+
+    <div class="dashboard_intro">
+        <h1>API Development Dashboards</h1>
+        <p>There will be an intro to the dashboard that I will have to write.</p>    
+    </div>
+
+    <div class="reddit-dashboard">
+        <h2>Reddit Data Dashboards</h2>
+        <p>A brief description of the reddit dashboards</p>
+        <div>This is where the Plotly Dashboard should be</div>
+    </div>
+
+</div>
+{% endblock body %}

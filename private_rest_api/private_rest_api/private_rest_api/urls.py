@@ -46,6 +46,9 @@ urlpatterns = [
 
     # API schema:
     path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
+    # Plotly-Dash urls:
+    path('django_plotly_dash/', include('django_plotly_dash.urls')),
     
     # Core Functionality for API Routes:
     path("api_core/", include("api_core.urls")),

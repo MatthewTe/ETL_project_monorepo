@@ -25,6 +25,8 @@ drf-yasg==1.20.0
 django-crispy-forms==1.14.0
 plotly==5.8.0
 django_plotly_dash==1.7.2
+dash==2.4.1
+
 
 # Packages for data ingestion:
 praw==7.5.0

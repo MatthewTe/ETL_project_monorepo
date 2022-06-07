@@ -1,5 +1,6 @@
 {% extends 'application_frontend/frontend_core_layout.html' %}
 {% load static %}
+{% load plotly_dash %}
 
 {% block css_styles %}
     <link rel="stylesheet" href="{% static 'application_frontend/css/sipri_styling.css' %}">
@@ -26,7 +27,7 @@
 
         <h3>Top 100 Arms Producing Company Data from 2002-2020</h3>
         <p>This dashboard displays timeseries data about a specific arms company such as its rank in the top 100 arms manufacturers or the percent of its sales that are made up of arms sales. This data describes how global arms manufacturing has evolved since the early 2000s and how different regions/countries have developed arms manufacturing capabilities. Again the full dataset from SIPRI can be accessed <a href="https://www.sipri.org/databases/armsindustry">here</a>:</p>
-
+        <div>{% plotly_app name="SIPRI_arms_companies" ratio=1 %}</div>
     </div>
 
 </div>
