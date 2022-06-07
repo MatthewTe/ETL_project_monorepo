@@ -2,7 +2,10 @@
 from .sipri_logic import build_company_timeseries, build_company_timeseries_subplot_fig
 
 # Importing Dash methods:
-from dash import dcc, html, Input, Output
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output
+
 from django_plotly_dash import DjangoDash
 
 # Creating the Dash App:
