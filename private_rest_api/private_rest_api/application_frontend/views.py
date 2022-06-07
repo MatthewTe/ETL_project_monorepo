@@ -237,8 +237,7 @@ def render_api_dashboard(request):
 
     # Querying all reddit posts created in the last month:
     prev_month = date.today() - timedelta(days=30)
-    #reddit_posts = RedditPosts.objects.filter(created_on__gt=prev_month)
-    reddit_posts = RedditPosts.objects.all()
+    reddit_posts = RedditPosts.objects.filter(created_on__gt=prev_month)
     reddit_posts = reddit_posts.values_list("created_on")
 
     # Converting list of records to a dataframe to resample and create plotly graph:
