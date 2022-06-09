@@ -34,6 +34,7 @@ tweepy==4.1.0
 django-tinymce==3.4.0
 openpyxl==3.0.10
 pandas==1.4.2
+scikit-image==0.19.2
 
 # Logging/Error catching packages:
 sentry-sdk

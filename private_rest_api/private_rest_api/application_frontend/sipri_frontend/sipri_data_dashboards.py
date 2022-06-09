@@ -5,7 +5,6 @@ from .sipri_logic import build_company_timeseries, build_company_timeseries_subp
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-
 from django_plotly_dash import DjangoDash
 
 # Creating the Dash App:

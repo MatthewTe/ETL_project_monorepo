@@ -1,0 +1,29 @@
+.nk_dash_intro{
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.nk_dash_intro p{
+    text-align: left;
+    font-size: large;
+}
+
+.nk_milliles_section{
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.nk_milliles_section p{
+    text-align: left;
+    font-size: large;
+}
+
+.nk_reading_sources{
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.nk_reading_sources p{
+    text-align: left;
+    font-size: large;
+}

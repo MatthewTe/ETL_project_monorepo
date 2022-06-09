@@ -17,6 +17,7 @@
         <h2>Reddit Data Dashboards</h2>
         <p>The Reddit API provides serialized data collected from the list of <a href="{% url 'Subreddits' %}">supported subreddits</a>. You can query this data via the schema specifications provided by the <a href="{% url 'schema-swagger-ui' %}">Open API specification</a> (under the <code>/reddit/posts/</code> section of the dashboard to see the docs or to test the API). You can also use the Ceteris Paribus python API here to query the data or you can build your own if you want maximum customization.</p>
         <div>{{ reddit_posts_timeseries|safe }}</div>
+        <p>More comprehensive documentation will be provided as the python and internal API is developed (and when I can get around to documenting) but for now the endpoints are exposed so anyone who is willing to play around with stuff can utilize them.</p>
     </div>
 
 </div>

@@ -47,6 +47,10 @@
     display: inline-block;
     vertical-align: middle;
 }
+.head_img p{
+    text-align: left;
+    color: gray;
+}
 
 .main_html_content{
     padding-top: 1rem;
@@ -61,5 +65,8 @@
     text-align: left;
 }
 .main_html_content p{
+    font-size: 1.3rem;
+}
+.main_html_content li{
     font-size: 1.3rem;
 }

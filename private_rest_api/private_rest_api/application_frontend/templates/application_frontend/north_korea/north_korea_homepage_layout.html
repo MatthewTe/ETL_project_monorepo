@@ -1,6 +1,37 @@
 {% extends 'application_frontend/frontend_core_layout.html' %}
 {% load static %}
+{% load plotly_dash %}
+
+{% block css_styles %}
+    <link rel="stylesheet" href="{% static 'application_frontend/css/north_korea_dashboard_styling.css' %}">
+{% endblock css_styles %}
 
 {% block body %}
-<img src="{% static 'application_frontend/imgs/korea_north_admin_2005.jpg' %}" alt="">
+<div class="nk_dashboard_content">
+    <div class="nk_dash_intro">
+        <h1>The North Korea Dashboard</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta modi officiis earum deleniti! Odit eius facere ipsum ullam atque, minima voluptatum dolorum reprehenderit nam modi impedit dolore quo, ex sit?</p>
+    </div>
+
+    <div>{% plotly_app name="nk_img_dashboard" ratio=1 %}</div>
+
+    <div class="nk_milliles_section">
+        <h1>DPRK Missiles</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque architecto ratione itaque vero nemo, modi incidunt aut pariatur dolorem saepe excepturi possimus non! Odio laboriosam consectetur totam, est esse ullam!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta modi officiis earum deleniti! Odit eius facere ipsum ullam atque, minima voluptatum dolorum reprehenderit nam modi impedit dolore quo, ex sit?</p>
+    </div>
+
+    <div class="nk_reading_sources">
+        <h1>DPRK Reading Resources</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti omnis corporis, repudiandae deserunt tempora suscipit facilis, commodi earum dolore natus quibusdam ab beatae quidem labore debitis fuga non ea accusamus.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta modi officiis earum deleniti! Odit eius facere ipsum ullam atque, minima voluptatum dolorum reprehenderit nam modi impedit dolore quo, ex sit?</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis ad quo veniam, modi tempore quod excepturi error repellendus nemo? Enim minima at fugit ipsa quaerat veritatis impedit, est provident? Recusandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, natus et? Incidunt quod ex, laborum aperiam illo culpa pariatur consectetur perferendis soluta odio sapiente facilis ipsam placeat molestiae eius officia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta modi officiis earum deleniti! Odit eius facere ipsum ullam atque, minima voluptatum dolorum reprehenderit nam modi impedit dolore quo, ex sit?</p>
+    </div>
+</div>
+
+
 {% endblock body %}

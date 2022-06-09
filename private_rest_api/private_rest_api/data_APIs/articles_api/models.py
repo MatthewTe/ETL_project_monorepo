@@ -28,6 +28,8 @@ class Article(models.Model):
         img (models.ImageField): The image that is used as the thumbnail for the article and the main image for the 
             full article.
 
+        img_source (models.CharField): The source for the image that is used in the thumbnail.
+
         author (models.ForeignKey): The author of the article that is connected via a foreign key to the
             main User model that the django project uses.
 
@@ -45,6 +47,7 @@ class Article(models.Model):
     title = models.CharField(max_length=250)
     body = tinymce_models.HTMLField()
     image = models.ImageField(null=True, blank=True, upload_to="ceteris_paribus/articles/")
+    img_source = models.CharField(null=True, blank=True, max_length=300)
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

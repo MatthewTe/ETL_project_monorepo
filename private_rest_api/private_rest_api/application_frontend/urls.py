@@ -6,7 +6,9 @@ from .views import (
     create_article, render_developer_documentation, render_sipri_dashboard, render_api_dashboard
     )
 
+# Importing Plotly Dash apps to expose them to templates:
 from .sipri_frontend.sipri_data_dashboards import app
+from .noth_korea_frontend.nk_dashboards import app
 
 urlpatterns = [
     path("", render_homepage, name="homepage"),
