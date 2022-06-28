@@ -10,10 +10,22 @@
 {% block body %}
 <div class="homepage_masthead">
     <img src="{% static 'application_frontend/imgs/masthead_background.jpg' %}" alt="">
+
     <div class="homepage_front_content">
-        <h1>Explore our data, analysis, research and opinions.</h1>
-        <p>Open source data dashboards, articles and APIs about international economics, international relations and foregin policy</p>    
+
+        <div class="headshot_grid">
+            <div class="headshot_container"><img class="profile_headshot" src="{% static 'application_frontend/imgs/homepage/profile_pic.jpg' %}" alt=""></div>
+            <div class="headshot_description">
+                <h1>Matthew Teelucksingh</h1>
+                <p>Data Scientist & Policy Analyst</p>
+            </div>    
+        </div>
+
+        <div class="headshot_description">
+            <p>Explore my open source data dashboards, articles and APIs about international economics, climate change, international relations and foregin policy</p>
+        </div>
     </div>
+
 </div>
 
 <div class="homepage_section_cards">
@@ -22,15 +34,15 @@
             <div class="card_image"><img src="{% static 'application_frontend/imgs/Checkpoin_Charlie_image.jpg' %}" alt=""></div>
             <div class="card_content">
                 <a class="hidden_link" href="{% url 'articles_homepage' %}"><h4>Articles and opinions</h4></a>
-                <p>Ceteris paribus publishes various writings ranging from formal articles and whitepapers about our data collection and dashboards to fully opinionated articles by authors discussing contemporary issues mainly in the fields of international economics and foregin policy (or geopolitics depending on where you’re from).</p>
+                <p>I upload various writings ranging from articles and whitepapers about our data collection and dashboards to fully opinionated articles discussing  contemporary issues mainly in the fields of international economics and foregin policy (or geopolitics depending on where you’re from).</p>
             </div>        
         </div>
 
         <div class="main_section_card">
             <div class="card_image"><img src="{% static 'application_frontend/imgs/korean_main_thumbnail.jpeg' %}" alt=""></div>
             <div class="card_content">
-                <a class="hidden_link" href="{% url 'north_korea_homepage' %}"><h4>The Korean-Peninsula and its unique issues and international position</h4></a>
-                <p>The modern geopolitical situation on the Korean peninsula arose from key decisions made during the final years for the second world war’s pacific theater. The division of the peninsula and the subsequent war has resulted in a political situation that has been a focus of international relations scholars, policy analysts and multilateral institutions ever since. Ceteris paribus has created a section of the site dedicated to understanding the tensions between the ROK, DPRK, the US and how these tensions are likely to develop into the 21st century.</p>
+                <a class="hidden_link" href="{% url 'about_me' %}"><h4>My work experience & education</h4></a>
+                <p>I’ve performed data collection, analysis and visualization during my time as a data analyst. I also have experience in formal report writing through my previous jobs as synthesizing and communicating findings from data is the other side of the data collection and visualization coin. I also wrote a few term papers while studying at Waterloo that I am happy with. All of this can be viewed here.</p>
             </div>
         </div>
 
@@ -52,20 +64,20 @@
             <div class="main_section_card">
                 <div class="card_image"><img src="{% static 'application_frontend/imgs/masthead_w_sipri.jpg' %}" alt=""></div>
                 <div class="card_content">
-                    <h4>Stockholm International Peace Research Institute Arms Dashboards</h4>
+                    <a class="hidden_link" href="{% url 'sipri_dashboard' %}"><h4>Stockholm International Peace Research Institute Arms Dashboards</h4></a>
                     <p>The Stockholm International Peace Research Institute is a Stockholm institute that “provides data, analysis and recommendations for armed conflict, military expenditure and arms trade as well as disarmament and arms control”. To that end it provides publicly available information about the global state of arms trade and production, which we use to create dashboards that communicate the ideas described in the raw data.</p>
                 </div>
                 
             </div>
 
             <div class="main_section_card">
-                <div class="card_image"><img src="{% static 'application_frontend/imgs/Social_Media_Thumbnail.png' %}" alt=""></div>
+                <div class="card_image"><img src="{% static 'application_frontend/imgs/korean_main_thumbnail.jpeg' %}" alt=""></div>
                 <div class="card_content">
-                    <h4>Social Media Dashboards</h4>
-                    <p>Ceteris paribus has multiple data ingestion projects currently running. One of these projects involves mining public data from popular social media services in order to perform sentiment analysis about key areas and issues. You can view dashboards showing our sentiment analysis or the status of our pipelines.</p>
+                    <a class="hidden_link" href="{% url 'north_korea_homepage' %}"><h4>The Korean-Peninsula and its unique issues and international position</h4></a>
+                    <p>The modern geopolitical situation on the Korean peninsula arose from key decisions made during the final years for the second world war’s pacific theater. The division of the peninsula and the subsequent war has resulted in a political situation that has been a focus of international relations scholars, policy analysts and multilateral institutions ever since. I've created a section of the site dedicated to understanding the tensions between the ROK, DPRK, the US and how these tensions are likely to develop into the 21st century.</p>
                 </div>
             </div>
-
+    
             <div class="main_section_card">
                 <div class="card_image">
                     <img src="{% static 'application_frontend/imgs/Zotero_Dashboard.png' %}" alt=""></div>

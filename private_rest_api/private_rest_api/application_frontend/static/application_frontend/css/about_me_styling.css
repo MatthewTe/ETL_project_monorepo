@@ -1,0 +1,58 @@
+.about_page_main{
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    font-size: larger;
+    padding: 2rem;
+}
+.text-section{
+    padding-bottom: 1rem;
+    text-align: left;
+}
+
+.education_section{
+    border: solid black 1px;
+    border-radius: 0.1rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+.education_section img{
+    height: 64px;
+}
+.header_grid{
+    display: inline-flex;
+    padding-bottom: 1rem;
+}
+.header_grid h3{
+    padding-top: 1rem;
+    align-items: left;
+    padding-left: 1.5rem;
+}
+
+
+.headshot_grid{
+    display: inline-flex;
+    margin-top: 2rem;
+}
+.headshot_container{
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.headshot_description{
+    position: relative;
+    top: 20%;
+    padding-top: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.profile_headshot{
+    width: 152px;
+    height: 152px;
+    border-radius: 50%;
+}
+
+.resume-section{
+    text-align:center
+}

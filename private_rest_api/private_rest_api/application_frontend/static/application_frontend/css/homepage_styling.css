@@ -18,12 +18,39 @@
   }
   .homepage_front_content{
     background-color: rgba(255, 255, 255, 0.685);
+      
     border-radius: 5px;
     position: absolute;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+  .homepage_front_content .headshot_grid{
+    display: grid;
+    grid-template-columns: auto auto;  
+  }
+
+  .headshot_grid .headshot_container{
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .headshot_grid .headshot_description{
+    position: relative;
+    top: 20%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .homepage_masthead .profile_headshot{
+    width: 152px;
+    height: 152px;
+    border-radius: 50%;
+  }
+
   .homepage_masthead h1 {
     font-size: 1.875rem;
     font-weight: 700;

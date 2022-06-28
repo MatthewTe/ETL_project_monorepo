@@ -1,0 +1,55 @@
+{% extends 'application_frontend/frontend_core_layout.html' %}
+{% load static %}
+
+{% block css_styles %}
+    <link rel="stylesheet" href="{% static 'application_frontend/css/about_me_styling.css' %}">
+{% endblock css_styles %}
+
+{% block body %}
+<div class="about_page_main">
+
+    <div class="headshot_grid">
+        <div class="headshot_container"><img class="profile_headshot" src="{% static 'application_frontend/imgs/homepage/profile_pic.jpg' %}" alt=""></div>
+        <div class="headshot_description">
+            <h1>Matthew Teelucksingh</h1>
+            <p>Data Scientist & Policy Analyst</p>
+        </div>    
+    </div>
+    
+    <div class="text-section">
+        <h2>Who Am I?</h2>
+        <p>Data Scientist and Policy Analyst whose focus is on energy policy and economics that has technical experience in data collections and analysis using web and data analysis frameworks in python and has previous experience in research and report writing.</p>        
+
+    </div>
+
+    <div class="text-section">
+        <a href="{% static 'application_frontend/data/homepage_data/resume.pdf' %}"><h2>My Resume</h2></a>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, non? Assumenda nisi totam excepturi repudiandae illo dolorum perferendis quidem corporis quam ipsam! Inventore est numquam hic doloribus esse omnis nihil.</p>
+    </div>
+
+    <div class="text-section">
+        <h2>Education</h2>
+
+        <div class="education_section">
+            <div class="header_grid">
+                <img src="{% static 'application_frontend/imgs/homepage/University_of_Waterloo_seal.png' %}" alt="">                            
+                <h3>Undergrad Bachelor of Environmental Studies - Honors Environment and Business</h3>    
+            </div>
+            <p> I did my Bachelors of Environmental Studies at the University of Waterloo from 2017 to 2022. The majority of my upper year courses were centered around both the policy and economic implications of addressing environmental issues. A list of the relevant upper year classes I took can be found here along with a few end-of term papers and projects that I think are a sufficient quality to showcase my research and writing skills:</p>    
+        </div>
+        
+        <a href="{% static 'application_frontend/data/homepage_data/Capstone_Final_Report.pdf' %}"><h4><u>Capstone Project: Incentivising Efficiency Optimization in the Canadian Aviation Industry Through Appropriate Emission Performance Standards</u></h4></a>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias, similique quod eligendi, eius sequi odio aperiam impedit provident harum quasi natus, delectus minus ducimus voluptatibus commodi ipsam illo corrupti!</p>
+        
+        <a href="{% static 'application_frontend/data/homepage_data/Policy_Brief.pdf' %}"><h4><u>Policy Brief: Trinidad and Tobago: Policy Proposals for Subsidy Reform for Environmental and Welfare Gains in an Institutionally Constrained Environment</u></h4></a>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore quasi cumque autem perspiciatis incidunt, illo sint alias laboriosam, fugit aliquid consectetur repudiandae quam voluptates nesciunt temporibus sapiente odit laudantium officiis!</p>
+
+    </div>
+
+    <div class="text-section">
+        <h2>My Work Experience</h2>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi omnis id quo, laboriosam quibusdam maxime! Quas vitae quisquam quasi, obcaecati ipsa facilis, autem voluptatibus odio, saepe molestiae repellat assumenda perferendis?</p>    
+    </div>
+
+</div>
+{% endblock body %}

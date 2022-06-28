@@ -51,6 +51,12 @@ def render_homepage(request):
 
     return render(request, "application_frontend/homepage/homepage.html", context=context)
 
+def about_me_homepage(request):
+    """Renders the About Me homepage that dispalys my personal information.
+    """
+    context = {}
+    return render(request, "application_frontend/homepage/about_me.html", context=context)
+
 # Article Views:
 def render_article_homepage(request):
     """View that renders the homepage for articles
@@ -213,6 +219,10 @@ def render_sipri_dashboard(request):
 
     return render(request, "application_frontend/data_dashboards/sipri_dashboard.html", context=context)
 
+def render_zotero_dashboard(request):
+    """View that renders the homepage for the SIPRI Data Dashboards"""
+    return render(request, "application_frontend/data_dashboards/zotero_research_dashboard_layout.html", context={})
+
 # Korea Views:
 def render_north_korea_homepage(request):
     """View that renders the homepage for the North Korea homepage"""
@@ -234,6 +244,10 @@ def render_about_page(request):
 def render_api_dashboard(request):
     """"""
     context = {}
+
+    # Querying the total number of reddit posts in the database and adding to context:
+    total_reddit_posts = RedditPosts.objects.all().count()
+    context["total_reddit_posts"] = total_reddit_posts
 
     # Querying all reddit posts created in the last month:
     prev_month = date.today() - timedelta(days=30)

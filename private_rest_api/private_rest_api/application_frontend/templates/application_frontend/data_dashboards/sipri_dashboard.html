@@ -26,7 +26,8 @@
         <div>{{ total_arms_sales_fig|safe }}</div>
 
         <h3>Top 100 Arms Producing Company Data from 2002-2020</h3>
-        <p>This dashboard displays timeseries data about a specific arms company such as its rank in the top 100 arms manufacturers or the percent of its sales that are made up of arms sales. This data describes how global arms manufacturing has evolved since the early 2000s and how different regions/countries have developed arms manufacturing capabilities. Again the full dataset from SIPRI can be accessed <a href="https://www.sipri.org/databases/armsindustry">here</a>:</p>
+        <p>This dashboard displays timeseries data about a specific arms company such as its rank in the top 100 arms manufacturers or the percent of its sales that are made up of arms sales. This data describes how global arms manufacturing has evolved since the early 2000s and how different regions/countries have developed arms manufacturing capabilities. Again the full dataset from SIPRI can be accessed <a href="https://www.sipri.org/databases/armsindustry">here</a>.</p>
+        <p> <b>NOTE</b>: SIPRI has a unique enough naming convention for companies that it can causes issues when searching (eg instead of Lockheed Martin Corporation you have to type in Lockheed Martin Corp.). If there is a company that you want to search for and you vaguely know the name of you can click <a href="">here</a> to get a list of the company names present in each year of the SIPRI dataset and control-f search for the exact name to use.</p>
         <div>{% plotly_app name="SIPRI_arms_companies" ratio=1 %}</div>
     </div>
 

@@ -12,7 +12,7 @@
 .card_img img{
     object-fit: cover;
     width: 100%;
-    max-height: 14rem;
+    max-height: 13rem;
 }
 
 .data_dashboard_card{
