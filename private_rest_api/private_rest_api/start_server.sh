@@ -23,4 +23,4 @@ python manage.py migrate
 
 # Starting the celery schedueler processes:
 echo "Starting the gunicorn server"
-gunicorn private_rest_api.wsgi:application --bind 0.0.0.0:80
+gunicorn private_rest_api.wsgi:application --bind 0.0.0.0:80 --timeout 60
