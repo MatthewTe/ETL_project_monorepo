@@ -28,7 +28,7 @@ import os
 # Importing visualization packages:
 import plotly.graph_objects as go
 import plotly.express as px
-
+from plotly.subplots import make_subplots
 
 # Method that checks if user is a staff member: 
 def is_not_staff(user):
@@ -56,8 +56,122 @@ def about_me_homepage(request):
     """
     context = {}
 
-    # TODO: Create a Plotly dashboard display.
+    # Coastal Dynamics Plotly Subplot Example:
 
+    # Loading data from the csv file as dataframe:
+    wave_df = pd.read_csv("application_frontend/static/application_frontend/data/Ruby_concat_wave.csv")
+
+    # Creating a radialaxis range list for Mean Wave Directon Polar Chart :
+    wave_radialaxis_range = [
+        min(wave_df['Ruby Waves: Sign. Wave Height']),
+        max(wave_df['Ruby Waves: Sign. Wave Height'])]
+        
+    # Creating radial axis range list for Wind Directon Polar Chart:
+    wind_radialaxis_range = [
+        min(wave_df['Ruby Waves: Wind speed']),
+        max(wave_df['Ruby Waves: Wind speed'])]
+
+    # <-------------------Creating and Formatting Plotly Figures------------------->
+
+    # Creating Main wave subplot:
+    ruby_subplots = make_subplots(
+        rows=5, cols=2,
+        specs = [[{'colspan': 2}, None],
+                [{'colspan': 2}, None],
+                [{'type':'polar', 'rowspan':2}, {'type':'polar', 'rowspan':2}],
+                [None, None],
+                [{'colspan': 2}, None]],
+        vertical_spacing = 0.10,
+        subplot_titles = ('Maximum and Significant Wave Height ',
+            'Peak Wave Period', 'Mean Wind Direction', 'Wind Speed', 'Wind Speed'))
+
+    # Adding Trace of Max and Sign Wave Height Timeseries:
+    ruby_subplots.add_trace(
+        go.Scatter(
+            x= wave_df.index,
+            y= wave_df['Ruby Waves: Max. Wave Height'],
+            name= 'Max Wave Height (m/s)'),
+        row = 1,
+        col = 1)
+    ruby_subplots.add_trace(
+        go.Scatter(
+            x= wave_df.index,
+            y= wave_df['Ruby Waves: Sign. Wave Height'],
+            name = 'Significant Wave Height (m/s)'),
+        row = 1,
+        col = 1)
+    ruby_subplots.update_xaxes(title_text='Date', row=1, col=1)
+    ruby_subplots.update_layout(yaxis=dict(range=[0, 7]))
+    ruby_subplots.update_yaxes(title_text='Meters/Second (m/s)', row=1, col=1)
+
+    # Creating and Formatting the Peak Wave Period Timeseries:
+    ruby_subplots.add_trace(
+        go.Scatter(
+            x = wave_df.index,
+            y = wave_df['Ruby Waves: Peak Wave Period'],
+            name = 'Peak Wave Period (s)'),
+        row = 2,
+        col = 1)
+    ruby_subplots.update_xaxes(title_text='Date', row=2, col=1)
+    ruby_subplots.update_yaxes(title_text='Seconds (s)', row=2, col=1)
+    
+    # Creating and formatting the Mean Wave Directon and Wind Directon Polar Chart:
+    ruby_subplots.add_trace(
+        go.Scatterpolar(
+            r = wave_df['Ruby Waves: Sign. Wave Height'],
+            theta = wave_df['Ruby Waves: Mean Wave Direction'],
+            mode = 'markers',
+            name = 'Mean Wave Direction and Significant Wave Height ',
+            marker_color = wave_df['Ruby Waves: Sign. Wave Height'],
+            marker_size = 3),
+        row = 3,
+        col = 1)
+    ruby_subplots.add_trace(
+        go.Scatterpolar(
+            r = wave_df['Ruby Waves: Wind speed'],
+            theta = wave_df['Ruby Waves: Wind direction'],
+            mode = 'markers',
+            name = 'Wind Speed and Wind Direction',
+            marker_color = wave_df['Ruby Waves: Wind speed'],
+            marker_size = 3),
+        row = 3,
+        col = 2)
+
+    # Creating and formatting the Wind Speed Timeseries:
+    ruby_subplots.add_trace(
+        go.Scatter(
+            x = wave_df.index,
+            y = wave_df['Ruby Waves: Wind speed'],
+            name = 'Wind Speed (m/s)'),
+        row = 5,
+        col =1)
+    ruby_subplots.update_xaxes(title_text='Date', row=4, col=1)
+    ruby_subplots.update_yaxes(title_text='Meters/Second (m/s)', row=4, col=1)
+
+
+    # Formatting the ruby_subplot:
+    ruby_subplots.update_layout(
+        title_text = 'Ruby Wave Forecast Data Dashboard',
+        legend_orientation="h",
+        height = 1300,
+        # Formatting the Wave Directon polar plot:
+        polar1 = dict(
+            # Formatting radial axis:
+            radialaxis = dict(range = wave_radialaxis_range),
+            # Formatting angular axis:
+            angularaxis = dict(rotation=90, direction='clockwise', visible=False)
+            ),
+        # Formatting the Wind Directon polar plot:
+        polar2 = dict(
+            # Formatting the raidal axis:
+            radialaxis = dict(range = wind_radialaxis_range),
+            # Formatting the angular axis:
+            angularaxis = dict(rotation=90, direction='clockwise', visible=False)
+        ),
+        template = 'plotly_dark')
+
+    # Adding the CDL subplot to the context:
+    context["cdl_dhi_plot"] = ruby_subplots.to_html()
 
     return render(request, "application_frontend/homepage/about_me.html", context=context)
 

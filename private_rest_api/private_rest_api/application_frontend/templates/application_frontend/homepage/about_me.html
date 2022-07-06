@@ -59,20 +59,28 @@
 
         <div class="work_section">
             <div class="header_grid">
-                <img src="{% static 'application_frontend/imgs/homepage/coastal-dynamics-logo.png' %}" alt="">
+                <img src="{% static 'application_frontend/imgs/homepage/cdl-icon.png' %}" alt="">
                 <h3>Coastal Dynamics</h3>    
             </div>
+            <p class="icon-header">
+                <img src="{% static 'application_frontend/imgs/homepage/django_icon.png' %}" alt="">
+                <img src="{% static 'application_frontend/imgs/homepage/docker_icon.png' %}" alt="">
+                <img src="{% static 'application_frontend/imgs/homepage/heroku-logo.png' %}" alt="">
+                <img src="{% static 'application_frontend/imgs/homepage/mike-logo.png' %}" alt="">
+                <img src="{% static 'application_frontend/imgs/homepage/plotly-dash-icon.png' %}" alt="">
+            </p>
             <p>My main work experience comes from my various internships at <a href="http://coastaldynamics.com/">Coastal Dynamics Ltd</a>. An environmental consultant company in Trinidad and Tobago. My work during my internship involved working with the outputs from their DHI hydrodynamic models that forecast ocean conditions used in their Environment Impact Assessments.</p>
             <p>My key responsibilities centered around building a data dashboard displaying the weekly hydrodynamic forecasts (ocean currents, wind speed/direction, wave height/direction, etc) for a client. Extracting this data and transforming it into a format that could be easily plottable required the development of a custom API for aggregating all the custom df2 file outputs from the DHI hydrodynamic model and a <a href="https://github.com/MatthewTe/mail_socket_api">SMTP API</a> for periodically updating the dashboard with these weekly aggregated outputs.</p>
-            <p>The dashboard was built using the Django Web Framework, received hydrodynamic model data from the scheduled SMTP process and was hosted on a Heroku server. Below is an example of the main data page of the dashboard that I developed:</p>
+            <p>The dashboard was built using the Django Web Framework, received hydrodynamic model data from the scheduled SMTP process and was hosted on a Heroku server. Below is an example of a publicly available section of the dashboard that I developed:</p>
         </div>
+        {{cdl_dhi_plot|safe}}
 
         <div class="work_section">
             <div class="header_grid">
                 <img src="{% static 'application_frontend/imgs/homepage/operation_wallacea_icon.png' %}" alt="">
                 <h3>Operation Wallacea</h3>    
             </div>
-            <p>I was a Research Assistant for an Operation Wallacea expedition to Pantai Nirwana, Indonesia where, for half of my stay I participated in underwater surveys that collected benthic & aquatic organism census data used for reef quality surveys from the Hoga Island Marine Station. I performed formatting and input of underwater data collected via excel.</p>
+            <p>I was a Research Assistant for an <a href="https://www.opwall.com/">Operation Wallacea</a> expedition to Pantai Nirwana, Indonesia where, for half of my stay I participated in underwater surveys that collected benthic & aquatic organism census data used for reef quality surveys from the Hoga Island Marine Station. I performed formatting and input of underwater data collected via excel.</p>
             <p>For the other half of my stay I deployed and recovered Baited Remote Underwater Video Systems (BRUVs) that collected video data about Elasmobranches as part of the Global Finprint survey initiative. I, along with other Research Assistants extracted and recorded the data from these BRUVs which contributed to <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0244154">an article about the efficacy of BRUVs in monitoring and surveying encumbrances.</a></p>
             
         </div>

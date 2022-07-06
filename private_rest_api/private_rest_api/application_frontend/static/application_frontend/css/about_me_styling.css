@@ -88,7 +88,18 @@
     border-radius: 0.1rem;
     padding: 1rem;
     margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 .work_section img{
     height: 64px;
+}
+
+.icon-header{
+    margin-top: 0.5rem;
+}
+.icon-header img{
+    max-width: 100%;
+    max-height: 32px;
+    display: inline-block;
+    margin-right: 1.5rem;
 }
