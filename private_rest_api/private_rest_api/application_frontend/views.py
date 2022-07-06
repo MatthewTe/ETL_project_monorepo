@@ -55,6 +55,10 @@ def about_me_homepage(request):
     """Renders the About Me homepage that dispalys my personal information.
     """
     context = {}
+
+    # TODO: Create a Plotly dashboard display.
+
+
     return render(request, "application_frontend/homepage/about_me.html", context=context)
 
 # Article Views:
