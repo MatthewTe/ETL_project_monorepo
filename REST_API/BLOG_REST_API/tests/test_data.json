@@ -1,0 +1,70 @@
+{
+    "BlogCategory":[
+        {
+            "id":1,
+            "name":"Politics"
+        },
+        {
+            "id":2,
+            "name":"Economics"
+        },
+        {  
+            "id":3,
+            "name":"Python"
+        }
+    ],
+
+    "BlogCategoryJSON":[
+        {
+            "name":"Computer Science"
+        },
+        {
+            "name":"Physics"
+        }
+    ],
+
+    "BlogPosts":[
+        {
+            "id":1,
+            "title":"This is Test Blog Post One",
+            "body":"#Test Title One\n ##Test Sub Title\n This is a bunch of data",
+            "author":"test_user",
+            "category":"Politics"
+        },
+        {
+            "id":2,
+            "title":"This is Test Blog Post Two",
+            "body":"#Test Title Two ##Test Sub Title\n This is a bunch of data",
+            "author":"test_user",
+            "category":"Politics"
+        },
+        {
+            "id":3,
+            "title":"This is Test Blog Post Three",
+            "body":"Test Title Three\n ##Test Sub Title\n This is a bunch of data",
+            "author":"test_user",
+            "category":"Politics"
+        }
+    ],
+
+    "BlogPostsJSON":[
+        {
+            "title":"Test of a Blog Post in JSON format one",
+            "body":"Test Title JSON One \n ##Test Sub Title\n This is a bunch of data",
+            "author":"test_user",
+            "category":"Politics"
+        },
+        {
+            "title":"Test of a Blog Post in JSON format two",
+            "body":"Test Title JSON Two \n ##Test Sub Title\n This is a bunch of data",
+            "author":"test_user",
+            "category":"Politics"
+        },
+        {
+            "title":"Test of a Blog Post in JSON format three",
+            "body":"Test Title JSON Three \n ##Test Sub Title\n This is a bunch of data",
+            "author":"test_user",
+            "category":"Politics"
+        }
+    ]
+}

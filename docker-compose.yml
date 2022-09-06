@@ -1,96 +1,19 @@
 ##############################################################
-# The main docker-compose file for standing up the mono-repo 
-# of the data ingestion project.
+# The docker-compose file for testing the REST API
 ##############################################################
----
+
 version: '3.9'
 services:
-
-  # The Nginx Server for Routing Traffic:
-  nginx-reverse-proxy:
-    build: ./nginx
-    networks: 
-      - rest_api_network
-    depends_on:
-      - private-rest-api
-      - celery-flower-monitor
-    container_name: nginx-reverse-proxy
-    restart: always
-
-  # Django REST API:
-  private-rest-api:
-    build:
-      context: private_rest_api/.
-      dockerfile: Dockerfile
-    depends_on: 
-      - celery-redis
-      - rest-api-psql
-    container_name: ETL-rest-api
-    networks: 
-      - rest_api_network
   
-  # Celery Worker:
-  celery-worker:
-    build:
-      context: private_rest_api/.
-      dockerfile: Dockerfile
-    depends_on: 
-      - rest-api-psql
-      - private-rest-api
-      - celery-redis
-    container_name: ELT-celery-worker
-    networks:
-      - rest_api_network
-  
-  # Celery Beat Scheduler:
-  celery-beat-scheduler:
-    build:
-      context: private_rest_api/.
-      dockerfile: Dockerfile
-    depends_on: 
-      - rest-api-psql
-      - private-rest-api
-      - celery-redis
-      - celery-worker
-    container_name: ETL-celery-beat-scheduler
+  rest-api:
+    build: ./
+    container_name: rest-api
+    env_file:
+      - .env
     volumes: 
-      - .:/app
-    networks: 
-      - rest_api_network
-  
-  # Celery Monitor Flower:       
-  celery-flower-monitor:
-    build: 
-      context: private_rest_api/celery_flower/.
-      dockerfile: Dockerfile
-    depends_on: 
-      - celery-beat-scheduler
-      - celery-worker
-      - celery-redis
-    container_name: ETL-celery-monitor-flower
-    networks: 
-      - rest_api_network
-    
-  # Redis Database for Celery:
-  celery-redis:
-    build:
-      context: private_rest_api/celery_redis/.
-      dockerfile: Dockerfile
-    container_name: celery-redis
-    networks: 
-      - rest_api_network
-
-  # PostgreSQL Database for the rest api:
-  rest-api-psql:
-    image: postgres
-    container_name: rest-api-psql
-    restart: always
-    networks: 
-      - rest_api_network
+      - rest-api-db:/db.sqlite3
+    ports: 
+      - "80:80"
 
 volumes:
-  rest-api-psql-volume:
-
-networks:
-  rest_api_network:
-    
+  rest-api-db:
