@@ -13,6 +13,8 @@ DEBUG = False
 ALLOWED_HOSTS = ["django-rest-api", os.environ.get("ALLOWED_HOST", ""), "localhost"]
 #ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS=["http://localhost", os.environ.get("CSRF_ORIGIN", "")]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
