@@ -10,7 +10,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = False
 
 # Routes for both the internal network and traffic: 
-ALLOWED_HOSTS = ["django-rest-api", os.environ.get("ALLOWED_HOST", "")]
+ALLOWED_HOSTS = ["django-rest-api", os.environ.get("ALLOWED_HOST", ""), "localhost"]
 #ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
