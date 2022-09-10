@@ -10,10 +10,25 @@ services:
     container_name: rest-api
     env_file:
       - .env
-    volumes: 
-      - rest-api-db:/db.sqlite3
     ports: 
       - "80:80"
+    networks: 
+      - rest_api_network
+
+  
+  rest-api-db:
+    image: postgres:latest
+    container_name: rest-api-db
+    volumes: 
+      - rest-api-psql-volume:/var/lib/postgresql/data
+    env_file: 
+      .env
+    restart: always
+    networks:
+      - rest_api_network
+
+networks: 
+  rest_api_network:
 
 volumes:
-  rest-api-db:
+  rest-api-psql-volume:
