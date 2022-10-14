@@ -32,7 +32,10 @@ INSTALLED_APPS = [
 
     # Internal packages:
     'user_management',
-    'BLOG_REST_API'
+    'BLOG_REST_API',
+    "PROFILE_API",
+    "ARTICLE_API"
+
 ]
 
 MIDDLEWARE = [

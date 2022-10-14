@@ -12,8 +12,8 @@ from user_management.views import root_url_redirect
 # Creating the OpenAPI schema:
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
-      default_version='v1',
+      title="Data API Version 3",
+      default_version='v3',
       description="Test description",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@snippets.local"),
@@ -40,5 +40,11 @@ urlpatterns = [
     path('api-token-auth/', views.obtain_auth_token),
     
     # BLOG REST API Routes:
-    path("blog-api/", include("BLOG_REST_API.urls"))
+    path("blog-api/", include("BLOG_REST_API.urls")),
+
+    # PROFILE REST API Routes:
+    path("profile-api/", include("PROFILE_API.urls")),
+
+    # ARTICLES REST API Routes:
+    path("article-api/", include("ARTICLE_API.urls"))
 ]
